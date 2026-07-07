@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, viewport-fit=cover" name="viewport"/>
+<title>FRETZA - Checkout</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;600;700;900&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-secondary-fixed": "#1a1c1c",
+                        "background": "#f8f9fa",
+                        "tertiary-container": "#909aab",
+                        "inverse-surface": "#2e3132",
+                        "outline": "#8e7164",
+                        "on-primary-fixed-variant": "#7a3000",
+                        "on-tertiary": "#ffffff",
+                        "surface-bright": "#f8f9fa",
+                        "tertiary": "#555f6f",
+                        "error-container": "#ffdad6",
+                        "error": "#ba1a1a",
+                        "on-background": "#191c1d",
+                        "surface-variant": "#e1e3e4",
+                        "on-tertiary-fixed": "#121c2a",
+                        "on-secondary-fixed-variant": "#454747",
+                        "outline-variant": "#e2bfb0",
+                        "primary": "#a04100",
+                        "tertiary-fixed": "#d9e3f6",
+                        "on-error-container": "#93000a",
+                        "on-primary-container": "#572000",
+                        "primary-container": "#ff6b00",
+                        "tertiary-fixed-dim": "#bdc7d9",
+                        "surface-container-high": "#e7e8e9",
+                        "on-secondary": "#ffffff",
+                        "on-primary-fixed": "#351000",
+                        "surface-container": "#edeeef",
+                        "inverse-primary": "#ffb693",
+                        "on-secondary-container": "#616363",
+                        "inverse-on-surface": "#f0f1f2",
+                        "on-tertiary-fixed-variant": "#3d4756",
+                        "secondary": "#5d5f5f",
+                        "secondary-fixed-dim": "#c6c6c7",
+                        "primary-fixed": "#ffdbcc",
+                        "surface-tint": "#a04100",
+                        "on-primary": "#ffffff",
+                        "secondary-fixed": "#e2e2e2",
+                        "secondary-container": "#dfe0e0",
+                        "on-surface": "#191c1d",
+                        "surface-dim": "#d9dadb",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-container-low": "#f3f4f5",
+                        "on-tertiary-container": "#283240",
+                        "on-error": "#ffffff",
+                        "primary-fixed-dim": "#ffb693",
+                        "on-surface-variant": "#5a4136",
+                        "surface": "#f8f9fa",
+                        "surface-container-highest": "#e1e3e4"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "xs": "4px",
+                        "xl": "40px",
+                        "gutter": "16px",
+                        "sm": "8px",
+                        "margin-desktop": "64px",
+                        "md": "16px",
+                        "max-width": "1280px",
+                        "lg": "24px",
+                        "base": "4px",
+                        "margin-mobile": "16px"
+                    },
+                    "fontFamily": {
+                        "display-lg": ["Lexend"],
+                        "headline-lg": ["Lexend"],
+                        "body-md": ["Inter"],
+                        "label-md": ["Inter"],
+                        "body-sm": ["Inter"],
+                        "headline-md": ["Lexend"],
+                        "headline-lg-mobile": ["Lexend"],
+                        "body-lg": ["Inter"],
+                        "label-sm": ["Inter"]
+                    },
+                    "fontSize": {
+                        "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "600"}],
+                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "label-md": ["14px", {"lineHeight": "16px", "letterSpacing": "0.01em", "fontWeight": "600"}],
+                        "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                        "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                        "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                        "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                        "label-sm": ["12px", {"lineHeight": "14px", "fontWeight": "500"}]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8f9fa;
+        }
+        .glass-header {
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+        }
+        .safe-bottom {
+            padding-bottom: env(safe-area-inset-bottom);
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #e2e2e2;
+            border-radius: 10px;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-surface">
+<!-- TopAppBar -->
+<header class="bg-surface/80 dark:bg-surface-dim/80 backdrop-blur-xl docked full-width top-0 sticky shadow-sm z-50">
+<div class="flex justify-between items-center px-gutter py-md w-full max-w-max-width mx-auto">
+<div class="flex items-center gap-3">
+<button class="flex items-center justify-center w-10 h-10 rounded-full hover:bg-primary-container/20 transition-all duration-300" onclick="history.back()">
+<span class="material-symbols-outlined text-primary">arrow_back</span>
+</button>
+<h1 class="font-headline-md text-headline-md-mobile font-black text-primary dark:text-primary-fixed-dim">FRETZA</h1>
+</div>
+<div class="flex items-center gap-2">
+<span class="font-label-md text-label-md text-on-surface-variant hidden md:block">Delivery to: <strong>Home</strong></span>
+<div class="w-8 h-8 rounded-full bg-primary-container flex items-center justify-center text-on-primary-container font-bold overflow-hidden border-2 border-white shadow-sm">
+<img class="w-full h-full object-cover" data-alt="A professional close-up studio portrait of a friendly young man with a warm smile, wearing a clean white t-shirt. The lighting is soft and high-key, emphasizing a modern startup employee aesthetic. The background is a minimalist, blurred corporate office space with neutral tones and orange accents to match the brand palette of FRETZA." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCclG8A_NH8wwqbfXX7NjGAHpKOdBFJiBXK8YWheKxVQRDVCWsi4Aktt0H_x5uU2MIv2X1TxaPFeK8sRNuoxCCXkfsv3q2m3cfd8VLx92TGMG8jNDFQbIhtmE9F0EpJMGLuplipjTsWKmybJN1R396MBdat0TjjHlMmelDXj8YjzvzvHSXrn_PA810I76Ne0mxbhdlieZHQblisHZloxTbTCtwvOhPR9Fx1iDaWJQNcamPTtxdg2CY6dQrEEjpp2hvjFh9GZPRlUw"/>
+</div>
+</div>
+</div>
+</header>
+<main class="max-w-max-width mx-auto px-4 md:px-gutter py-md md:py-lg grid grid-cols-1 lg:grid-cols-12 gap-lg pb-32">
+<!-- Left Column: Checkout Details -->
+<div class="lg:col-span-8 space-y-lg">
+<!-- Section 1: Order Summary -->
+<section class="bg-surface-container-lowest rounded-xl shadow-sm overflow-hidden border border-outline-variant/20">
+<div class="px-md py-4 border-b border-surface-variant flex justify-between items-center">
+<h2 class="font-headline-md text-headline-md text-on-surface">Order Summary</h2>
+<span class="font-label-md text-primary bg-primary-fixed px-3 py-1 rounded-full">3 Items</span>
+</div>
+<div class="divide-y divide-surface-variant/50">
+<!-- Item 1 -->
+<div class="p-md flex gap-md items-start group">
+<div class="w-20 h-20 rounded-lg overflow-hidden flex-shrink-0">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" data-alt="A high-resolution, appetizing close-up of a premium artisan burger with melting cheddar cheese, crisp lettuce, and heirloom tomatoes on a toasted brioche bun. The lighting is dramatic and warm, highlighting the textures of the food. Set against a clean, modern kitchen background with orange and white tones to maintain FRETZA brand consistency." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCKuz63icQv1veP9wJJpQaYbn0127nxvam4JLpMIlwxi_YnbXjlBXpJBfONPLimMIrQRkqYuDeE7EyQcbHCBsmu5Xl89s5IjMSQs_zZY8tx2hmAiLmAM2Yrzq-gvmzDNpnmTfvQ2PqwbpIZQX7zrFLAcBheVcrRuuWFdR31ltaNQeWSYBdSWMBWD6aZBX9IMLJo0A_NeHMcQDeWh65rtE8bhFnRYxMBtLxbGiw1GNJ9r2IMzW6QNLHcf_ib2RK6qXbRgxp-_kU0WQ"/>
+</div>
+<div class="flex-grow">
+<div class="flex justify-between">
+<h3 class="font-label-md text-on-surface">Double Truffle Burger</h3>
+<span class="font-label-md text-on-surface">₹549</span>
+</div>
+<p class="font-body-sm text-secondary text-sm line-clamp-1">Extra cheese, No onions</p>
+<div class="mt-2 flex items-center gap-4">
+<div class="flex items-center border border-outline-variant/30 rounded-lg">
+<button class="p-1 px-2 hover:bg-surface-container transition-colors"><span class="material-symbols-outlined text-sm">remove</span></button>
+<span class="px-2 font-label-sm">1</span>
+<button class="p-1 px-2 hover:bg-surface-container transition-colors"><span class="material-symbols-outlined text-sm">add</span></button>
+</div>
+<button class="text-error font-label-sm flex items-center gap-1">
+<span class="material-symbols-outlined text-sm">delete</span> Remove
+                                </button>
+</div>
+</div>
+</div>
+<!-- Item 2 -->
+<div class="p-md flex gap-md items-start group">
+<div class="w-20 h-20 rounded-lg overflow-hidden flex-shrink-0">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" data-alt="A vibrant and fresh gourmet Mediterranean salad in a white ceramic bowl, featuring Kalamata olives, feta cheese cubes, and colorful bell peppers. Bright, natural lighting creates a crisp and healthy look. The styling is minimalist and premium, aligning with a high-end food delivery application's modern corporate aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCw8Tadnnt0MKfCkzGzyszb76HX7CfGw8xA5OCYBve7nzXrWsKDm_0JBLm9YD4Cr-ZNUz1CRmSNoq-kzrA-TX-8JwDajNYIYf2T6l1S7XztpMtzGUxyGVqvbCggsVs9nLYUokb8H5V8u-uaHCsoyxmuKaFQ4jHkJEKbx8f2pLgYI65-y3nDZ2Orx3uDwi3G7PUc77P2zbCl1QyY5JmtwWbafXciC-5pO2G44o4vyTshU6y1pDkF328n0CbKDUWSk4hXXg_n5KHDlQ"/>
+</div>
+<div class="flex-grow">
+<div class="flex justify-between">
+<h3 class="font-label-md text-on-surface">Mediterranean Bowl</h3>
+<span class="font-label-md text-on-surface">₹320</span>
+</div>
+<p class="font-body-sm text-secondary text-sm">Standard configuration</p>
+<div class="mt-2 flex items-center gap-4">
+<div class="flex items-center border border-outline-variant/30 rounded-lg">
+<button class="p-1 px-2 hover:bg-surface-container transition-colors"><span class="material-symbols-outlined text-sm">remove</span></button>
+<span class="px-2 font-label-sm">1</span>
+<button class="p-1 px-2 hover:bg-surface-container transition-colors"><span class="material-symbols-outlined text-sm">add</span></button>
+</div>
+<button class="text-error font-label-sm flex items-center gap-1">
+<span class="material-symbols-outlined text-sm">delete</span> Remove
+                                </button>
+</div>
+</div>
+</div>
+</div>
+<button class="w-full py-4 bg-surface-container-low text-primary font-label-md hover:bg-surface-container-high transition-colors">
+                    + Add More Items
+                </button>
+</section>
+<!-- Section 2: Delivery Address -->
+<section class="bg-surface-container-lowest rounded-xl shadow-sm border border-outline-variant/20 p-md">
+<h2 class="font-headline-md text-headline-md text-on-surface mb-md">Delivery Address</h2>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-md">
+<!-- Address Card: Active -->
+<div class="relative border-2 border-primary bg-primary/5 p-md rounded-xl cursor-pointer group">
+<div class="absolute top-3 right-3 text-primary">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</div>
+<div class="flex items-center gap-3 mb-2">
+<span class="material-symbols-outlined text-primary">home</span>
+<span class="font-label-md text-on-surface">Home</span>
+</div>
+<p class="font-body-sm text-on-surface-variant">42, Green Valley Apartments, Khunta Main Road, Ward 12, Odisha - 757019</p>
+</div>
+<!-- Address Card: Inactive -->
+<div class="border border-outline-variant/30 p-md rounded-xl cursor-pointer hover:border-primary/50 transition-all group">
+<div class="flex items-center gap-3 mb-2">
+<span class="material-symbols-outlined text-secondary">work</span>
+<span class="font-label-md text-on-surface">Office</span>
+</div>
+<p class="font-body-sm text-on-surface-variant">Block B, TechHub Plaza, Khunta Industrial Area, Odisha - 757021</p>
+</div>
+</div>
+<button class="mt-md flex items-center gap-2 text-primary font-label-md hover:underline">
+<span class="material-symbols-outlined text-sm">add</span> Add New Address
+                </button>
+</section>
+<!-- Section 3: Payment Method -->
+<section class="bg-surface-container-lowest rounded-xl shadow-sm border border-outline-variant/20 p-md">
+<h2 class="font-headline-md text-headline-md text-on-surface mb-md">Payment Method</h2>
+<div class="space-y-3">
+<label class="flex items-center justify-between p-md border border-outline-variant/30 rounded-xl cursor-pointer hover:bg-surface-container-low transition-all">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 bg-primary-fixed-dim rounded-full flex items-center justify-center text-primary">
+<span class="material-symbols-outlined">account_balance_wallet</span>
+</div>
+<div>
+<p class="font-label-md text-on-surface">UPI / QR Scan</p>
+<p class="font-body-sm text-secondary">Pay instantly via GooglePay, PhonePe</p>
+</div>
+</div>
+<input class="w-5 h-5 text-primary focus:ring-primary border-outline-variant/50" name="payment" type="radio"/>
+</label>
+<label class="flex items-center justify-between p-md border border-primary bg-primary/5 rounded-xl cursor-pointer">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 bg-primary-container rounded-full flex items-center justify-center text-on-primary-container">
+<span class="material-symbols-outlined">payments</span>
+</div>
+<div>
+<p class="font-label-md text-on-surface">Cash on Delivery</p>
+<p class="font-body-sm text-secondary">Pay when your order arrives</p>
+</div>
+</div>
+<input checked="" class="w-5 h-5 text-primary focus:ring-primary border-outline-variant/50" name="payment" type="radio"/>
+</label>
+</div>
+</section>
+</div>
+<!-- Right Column: Bill Details (Sidebar) -->
+<aside class="lg:col-span-4 h-fit sticky top-24">
+<div class="bg-surface-container-lowest rounded-xl shadow-lg border border-outline-variant/20 p-md space-y-md">
+<h2 class="font-headline-md text-headline-md text-on-surface">Bill Details</h2>
+<div class="space-y-3 pt-2">
+<div class="flex justify-between text-on-surface-variant">
+<span class="font-body-md">Item Total</span>
+<span class="font-body-md">₹869.00</span>
+</div>
+<div class="flex justify-between text-on-surface-variant">
+<span class="font-body-md">Delivery Fee</span>
+<span class="font-body-md text-green-600">FREE</span>
+</div>
+<div class="flex justify-between text-on-surface-variant">
+<div class="flex items-center gap-1">
+<span class="font-body-md">Taxes &amp; Charges</span>
+<span class="material-symbols-outlined text-[14px] cursor-help">info</span>
+</div>
+<span class="font-body-md">₹43.45</span>
+</div>
+<div class="border-t border-dashed border-outline-variant/50 my-md"></div>
+<div class="flex justify-between items-center text-on-surface">
+<span class="font-headline-md">Grand Total</span>
+<span class="font-headline-md text-primary">₹912.45</span>
+</div>
+</div>
+<div class="bg-primary/5 border border-primary/20 p-md rounded-xl flex gap-3">
+<span class="material-symbols-outlined text-primary">verified_user</span>
+<p class="font-label-sm text-on-primary-fixed-variant">FRETZA Secure Checkout: Your data and transactions are protected by industry-grade encryption.</p>
+</div>
+<!-- Web Only Button (Hidden on Mobile as it uses sticky bottom) -->
+<button class="hidden md:block w-full py-4 bg-primary-container text-on-primary-container font-headline-md rounded-xl shadow-md hover:bg-primary-container/90 active:scale-[0.98] transition-all">
+                    Place Order
+                </button>
+</div>
+<div class="mt-md p-md bg-surface-variant/30 rounded-xl border border-outline-variant/10 text-center">
+<p class="font-label-sm text-secondary">Ordering for a large event? Contact our concierge for bulk delivery support in Khunta.</p>
+</div>
+</aside>
+</main>
+<!-- Mobile Sticky Bottom CTA -->
+<div class="md:hidden fixed bottom-0 left-0 right-0 z-50 p-4 bg-surface/90 backdrop-blur-md border-t border-outline-variant/20 shadow-[0_-8px_24px_rgba(0,0,0,0.1)]">
+<div class="flex items-center justify-between mb-3 px-2">
+<div>
+<p class="text-xs text-secondary font-medium uppercase tracking-wider">Total Amount</p>
+<p class="font-headline-md text-on-surface">₹912.45</p>
+</div>
+<button class="text-primary font-label-md flex items-center gap-1">
+                View Details <span class="material-symbols-outlined text-sm">keyboard_arrow_up</span>
+</button>
+</div>
+<button class="w-full py-4 bg-primary-container text-on-primary-container font-headline-md rounded-xl shadow-lg active:scale-95 transition-transform" id="placeOrderBtn">
+            Place Order
+        </button>
+</div>
+<!-- BottomNavBar (Only shown if navigation is top-level, but here suppressed for transactional focus per "Relevance Check") -->
+<script>
+        // Micro-interactions
+        const orderBtn = document.getElementById('placeOrderBtn');
+        if(orderBtn) {
+            orderBtn.addEventListener('click', () => {
+                orderBtn.innerHTML = '<span class="flex items-center justify-center gap-3"><svg class="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg> Processing...</span>';
+                orderBtn.classList.add('bg-on-primary-fixed-variant');
+                
+                setTimeout(() => {
+                    alert('Order Placed Successfully! Your delicious food is being prepared.');
+                    window.location.reload();
+                }, 2000);
+            });
+        }
+
+        // Handle address selection visual
+        const addressCards = document.querySelectorAll('section:nth-of-type(2) .cursor-pointer');
+        addressCards.forEach(card => {
+            card.addEventListener('click', () => {
+                addressCards.forEach(c => {
+                    c.classList.remove('border-2', 'border-primary', 'bg-primary/5');
+                    c.classList.add('border', 'border-outline-variant/30');
+                    const check = c.querySelector('.check-circle');
+                    if(check) check.remove();
+                });
+                card.classList.remove('border', 'border-outline-variant/30');
+                card.classList.add('border-2', 'border-primary', 'bg-primary/5');
+                const checkHtml = '<div class="absolute top-3 right-3 text-primary check-circle"><span class="material-symbols-outlined" style="font-variation-settings: \'FILL\' 1;">check_circle</span></div>';
+                card.insertAdjacentHTML('beforeend', checkHtml);
+            });
+        });
+    </script>
+</body></html>

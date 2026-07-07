@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+
+<html class="scroll-smooth" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>FRETZA - Restaurant Details</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;600;700;800;900&amp;family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-secondary-fixed": "#1a1c1c",
+                    "background": "#f8f9fa",
+                    "tertiary-container": "#909aab",
+                    "inverse-surface": "#2e3132",
+                    "outline": "#8e7164",
+                    "on-primary-fixed-variant": "#7a3000",
+                    "on-tertiary": "#ffffff",
+                    "surface-bright": "#f8f9fa",
+                    "tertiary": "#555f6f",
+                    "error-container": "#ffdad6",
+                    "error": "#ba1a1a",
+                    "on-background": "#191c1d",
+                    "surface-variant": "#e1e3e4",
+                    "on-tertiary-fixed": "#121c2a",
+                    "on-secondary-fixed-variant": "#454747",
+                    "outline-variant": "#e2bfb0",
+                    "primary": "#a04100",
+                    "tertiary-fixed": "#d9e3f6",
+                    "on-error-container": "#93000a",
+                    "on-primary-container": "#572000",
+                    "primary-container": "#ff6b00",
+                    "tertiary-fixed-dim": "#bdc7d9",
+                    "surface-container-high": "#e7e8e9",
+                    "on-secondary": "#ffffff",
+                    "on-primary-fixed": "#351000",
+                    "surface-container": "#edeeef",
+                    "inverse-primary": "#ffb693",
+                    "on-secondary-container": "#616363",
+                    "inverse-on-surface": "#f0f1f2",
+                    "on-tertiary-fixed-variant": "#3d4756",
+                    "secondary": "#5d5f5f",
+                    "secondary-fixed-dim": "#c6c6c7",
+                    "primary-fixed": "#ffdbcc",
+                    "surface-tint": "#a04100",
+                    "on-primary": "#ffffff",
+                    "secondary-fixed": "#e2e2e2",
+                    "secondary-container": "#dfe0e0",
+                    "on-surface": "#191c1d",
+                    "surface-dim": "#d9dadb",
+                    "surface-container-lowest": "#ffffff",
+                    "surface-container-low": "#f3f4f5",
+                    "on-tertiary-container": "#283240",
+                    "on-error": "#ffffff",
+                    "primary-fixed-dim": "#ffb693",
+                    "on-surface-variant": "#5a4136",
+                    "surface": "#f8f9fa",
+                    "surface-container-highest": "#e1e3e4"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "xs": "4px",
+                    "xl": "40px",
+                    "gutter": "16px",
+                    "sm": "8px",
+                    "margin-desktop": "64px",
+                    "md": "16px",
+                    "max-width": "1280px",
+                    "lg": "24px",
+                    "base": "4px",
+                    "margin-mobile": "16px"
+            },
+            "fontFamily": {
+                    "display-lg": ["Lexend"],
+                    "headline-lg": ["Lexend"],
+                    "body-md": ["Inter"],
+                    "label-md": ["Inter"],
+                    "body-sm": ["Inter"],
+                    "headline-md": ["Lexend"],
+                    "headline-lg-mobile": ["Lexend"],
+                    "body-lg": ["Inter"],
+                    "label-sm": ["Inter"]
+            },
+            "fontSize": {
+                    "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "600"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "label-md": ["14px", {"lineHeight": "16px", "letterSpacing": "0.01em", "fontWeight": "600"}],
+                    "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                    "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                    "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "label-sm": ["12px", {"lineHeight": "14px", "fontWeight": "500"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .glass {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+        }
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-surface font-body-md antialiased overflow-x-hidden">
+<!-- Top AppBar (from Shared Components JSON) -->
+<header class="docked full-width top-0 sticky z-50 bg-surface/80 dark:bg-surface-dim/80 backdrop-blur-xl shadow-sm transition-all duration-300 ease-in-out">
+<div class="flex justify-between items-center px-gutter py-md w-full max-w-max-width mx-auto">
+<div class="flex items-center gap-sm">
+<button class="p-2 hover:bg-primary-container/20 rounded-full transition-colors">
+<span class="material-symbols-outlined text-primary">arrow_back</span>
+</button>
+<div class="flex items-center gap-xs">
+<span class="material-symbols-outlined text-primary">location_on</span>
+<span class="font-label-md text-label-md text-on-surface-variant">Khunta, Odisha</span>
+</div>
+</div>
+<h1 class="font-headline-md text-headline-md-mobile font-black text-primary dark:text-primary-fixed-dim">FRETZA</h1>
+<div class="flex items-center gap-md">
+<button class="p-2 hover:bg-primary-container/20 rounded-full transition-colors hidden md:flex">
+<span class="material-symbols-outlined text-on-surface-variant">search</span>
+</button>
+<div class="w-10 h-10 rounded-full bg-surface-container-highest flex items-center justify-center overflow-hidden border border-outline-variant/30">
+<img class="w-full h-full object-cover" data-alt="A professional studio portrait of a customer smiling warmly, minimalist clean background, soft lighting, high-end commercial aesthetic, using the FRETZA brand colors of orange and white in the clothing subtle details." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDCQNEcS9UrzH3O090fWr5hpqlNyVksZ6JQ8WXY-_bkWQmWKx3ow0-krjdyL64WAEM30crkxpqq9-kx6NWrT5ZXidiZd03gIXp-8P8dNcPP0dwGD209vtpjar-C_f7-AeTk1a0ba2_5J4JH2iJKUDwn7_De7noc9Nn5H9wjMokSzFA6_4hifTqT-hcXrAWr6f18kYMVRn2rLHPFTFD2HhfwezXG2_sSuW_LHN1sPPNP5okF9QlD4Y283LR-uY2NoNjcubFNqfx0AQ"/>
+</div>
+</div>
+</div>
+</header>
+<main class="w-full max-w-max-width mx-auto pb-32">
+<!-- Hero Section -->
+<section class="relative h-[300px] md:h-[450px] w-full overflow-hidden">
+<div class="w-full h-full transition-transform duration-700 hover:scale-105" data-alt="High-resolution, appetizing shot of a gourmet burger and rustic fries on a wooden table. Warm sunlight streams from a window, creating long shadows and highlighting the texture of the sesame bun and melting cheese. The vibe is a premium modern restaurant with lush greenery in the background." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCxAmuvEhKKtcjPvpmPHAmNtjnUgNxZZkzsYfYg2T0d16BSeX1v2GVSM7TO7ofBPTGxaWAt3ReBlQHeV7UF87NSHmD-bqrezXMrWA8Vos2a5QthTMw7NZorGOqR5600-ScSe4AGyPZBH31vQkUeUlEpkxnKVXOgxb0e1795o1W514F1ewI2fN6jHt_2IeSUTzJ-5t2iN0Frp9_pwRg2Bz3VxAp54GjX0Sx9EMjH3M2NtEho-kG-imRbr301y-mlkpOBCGjSNx_dIQ')">
+</div>
+<div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+<!-- Restaurant Info Card (Glassmorphism) -->
+<div class="absolute -bottom-10 left-gutter right-gutter md:left-margin-desktop md:right-auto md:w-[400px]">
+<div class="glass p-lg rounded-xl shadow-lg border border-white/20">
+<div class="flex justify-between items-start mb-sm">
+<div>
+<h2 class="font-headline-lg-mobile md:font-headline-md text-headline-md text-on-surface">The Saffron Grill</h2>
+<p class="text-on-surface-variant font-body-sm">North Indian • Mughlai • Tandoor</p>
+</div>
+<div class="bg-primary px-sm py-1 rounded-lg flex items-center gap-xs text-white">
+<span class="font-label-md">4.8</span>
+<span class="material-symbols-outlined text-[14px]" style="font-variation-settings: 'FILL' 1;">star</span>
+</div>
+</div>
+<div class="flex items-center justify-between border-t border-outline-variant/30 pt-md mt-md">
+<div class="flex flex-col items-center">
+<span class="material-symbols-outlined text-primary mb-1">schedule</span>
+<span class="font-label-md text-on-surface">25-30 min</span>
+<span class="text-[10px] uppercase tracking-wider text-on-surface-variant">Delivery</span>
+</div>
+<div class="w-px h-8 bg-outline-variant/30"></div>
+<div class="flex flex-col items-center">
+<span class="material-symbols-outlined text-primary mb-1">distance</span>
+<span class="font-label-md text-on-surface">2.4 km</span>
+<span class="text-[10px] uppercase tracking-wider text-on-surface-variant">Distance</span>
+</div>
+<div class="w-px h-8 bg-outline-variant/30"></div>
+<div class="flex flex-col items-center">
+<span class="material-symbols-outlined text-primary mb-1">payments</span>
+<span class="font-label-md text-on-surface">₹200 for two</span>
+<span class="text-[10px] uppercase tracking-wider text-on-surface-variant">Cost</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Spacer for the floating info card -->
+<div class="h-16 md:h-20"></div>
+<!-- Menu Navigation (Sticky Categories) -->
+<nav class="sticky top-[72px] z-40 bg-surface/90 backdrop-blur-md border-b border-outline-variant/20 mb-lg">
+<div class="px-gutter py-md flex gap-md overflow-x-auto hide-scrollbar">
+<a class="whitespace-nowrap px-lg py-2 rounded-full bg-primary-container text-on-primary-container font-label-md transition-all active:scale-95" href="#bestsellers">Bestsellers</a>
+<a class="whitespace-nowrap px-lg py-2 rounded-full bg-surface-container-high text-on-surface-variant font-label-md hover:bg-primary-container/20 transition-all" href="#mains">Main Course</a>
+<a class="whitespace-nowrap px-lg py-2 rounded-full bg-surface-container-high text-on-surface-variant font-label-md hover:bg-primary-container/20 transition-all" href="#beverages">Beverages</a>
+<a class="whitespace-nowrap px-lg py-2 rounded-full bg-surface-container-high text-on-surface-variant font-label-md hover:bg-primary-container/20 transition-all" href="#desserts">Desserts</a>
+</div>
+</nav>
+<!-- Menu Sections -->
+<div class="px-gutter grid grid-cols-1 lg:grid-cols-12 gap-lg">
+<!-- Items Column -->
+<div class="lg:col-span-8 space-y-xl">
+<!-- Bestsellers -->
+<section id="bestsellers">
+<h3 class="font-headline-md text-headline-md mb-md flex items-center gap-sm">
+<span class="material-symbols-outlined text-primary">local_fire_department</span>
+                        Bestsellers
+                    </h3>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-md">
+<!-- Item Card 1 -->
+<div class="bg-surface-container-lowest p-md rounded-xl shadow-sm border border-outline-variant/10 flex gap-md group hover:shadow-md transition-all duration-300">
+<div class="flex-1">
+<div class="flex items-center gap-xs mb-xs">
+<span class="w-3 h-3 border border-green-600 flex items-center justify-center p-[1px]"><span class="w-full h-full bg-green-600 rounded-full"></span></span>
+<span class="text-[10px] font-bold text-green-600 uppercase tracking-widest">Veg</span>
+</div>
+<h4 class="font-label-md text-on-surface group-hover:text-primary transition-colors">Paneer Tikka Butter Masala</h4>
+<p class="font-body-sm text-on-surface-variant line-clamp-2 mt-1">Cubes of paneer cooked in a rich, creamy tomato-based gravy with butter and aromatic spices.</p>
+<p class="font-label-md text-on-surface mt-2">₹280</p>
+</div>
+<div class="relative w-28 h-28 shrink-0">
+<img class="w-full h-full object-cover rounded-lg" data-alt="Top-down shot of a ceramic bowl filled with rich, orange Paneer Tikka Butter Masala, garnished with a swirl of cream and fresh coriander. Soft studio lighting, high-contrast FRETZA aesthetic, vibrant colors on a clean marble surface." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAyNYD1_EP8cYeyyAnIgb04gE_wCkaMSQ81DoBDSZoVQiuQHZVF0WhwbRU1IpDZC9ttnsn0P46lEVjs4KX5xRBTHkf2c-WppzHqcC6E0Mbe8q38SeNLbfLk5KtiLJhGe7-TGkwRkLGJwMFnHMI3vvggAKE11DY6cfMGo5TEOU_hZTcqa8la0jrZZwiRQUoHbBMFUfHM1vn143zb_41o0u3wk3Ak2pWKsgKleEcjPrX5rPnKhigZkrd4VcktbeqEyA-oXKYf03A5ug"/>
+<button class="absolute -bottom-2 left-1/2 -translate-x-1/2 bg-white text-primary border border-primary-container shadow-md px-6 py-1.5 rounded-lg font-bold text-sm hover:bg-primary-fixed transition-colors active:scale-90" onclick="addToCart(this)">
+                                    ADD
+                                </button>
+<div class="hidden absolute -bottom-2 left-1/2 -translate-x-1/2 bg-primary text-white shadow-md flex items-center rounded-lg overflow-hidden">
+<button class="px-3 py-1.5 hover:bg-primary-fixed-variant transition-colors" onclick="decrement(this)">-</button>
+<span class="px-2 font-bold qty">1</span>
+<button class="px-3 py-1.5 hover:bg-primary-fixed-variant transition-colors" onclick="increment(this)">+</button>
+</div>
+</div>
+</div>
+<!-- Item Card 2 -->
+<div class="bg-surface-container-lowest p-md rounded-xl shadow-sm border border-outline-variant/10 flex gap-md group hover:shadow-md transition-all duration-300">
+<div class="flex-1">
+<div class="flex items-center gap-xs mb-xs">
+<span class="w-3 h-3 border border-red-600 flex items-center justify-center p-[1px]"><span class="w-full h-full bg-red-600 rounded-full"></span></span>
+<span class="text-[10px] font-bold text-red-600 uppercase tracking-widest">Non-Veg</span>
+</div>
+<h4 class="font-label-md text-on-surface group-hover:text-primary transition-colors">Murg Dum Biryani</h4>
+<p class="font-body-sm text-on-surface-variant line-clamp-2 mt-1">Fragrant basmati rice layered with succulent chicken pieces and spices, slow-cooked in a sealed clay pot.</p>
+<p class="font-label-md text-on-surface mt-2">₹350</p>
+</div>
+<div class="relative w-28 h-28 shrink-0">
+<img class="w-full h-full object-cover rounded-lg" data-alt="A beautiful clay handi filled with aromatic Chicken Dum Biryani, showing layers of long-grain rice, caramelized onions, and tender chicken. Garnish with mint leaves. Close-up food photography with a shallow depth of field, warm lighting, FRETZA modern startup aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuArx-O7o0i5J3gkwn5pKInmX34WSDa3cj810iAJGGNYSZdX7qsrrHvw37jEIXpSw1gs9enoev45bEdallUdsx09TIqbWxedluOkn7jw0AH_D5I6p14KTzmrmvayPOnitdB3gRO1gr_Uk9_HDugQXlytC9IWXg8Kkprj7FChNE5oenY34j82DRJdUXBtJs_BzZDidrApDrikr_8ksbeCa364Thg5-fVePbtEVVerKekAEunJHHJOkkAOmC1H8zeudePBTx6vTTrFvg"/>
+<button class="absolute -bottom-2 left-1/2 -translate-x-1/2 bg-white text-primary border border-primary-container shadow-md px-6 py-1.5 rounded-lg font-bold text-sm hover:bg-primary-fixed transition-colors active:scale-90" onclick="addToCart(this)">
+                                    ADD
+                                </button>
+<div class="hidden absolute -bottom-2 left-1/2 -translate-x-1/2 bg-primary text-white shadow-md flex items-center rounded-lg overflow-hidden">
+<button class="px-3 py-1.5 hover:bg-primary-fixed-variant transition-colors" onclick="decrement(this)">-</button>
+<span class="px-2 font-bold qty">1</span>
+<button class="px-3 py-1.5 hover:bg-primary-fixed-variant transition-colors" onclick="increment(this)">+</button>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Mains -->
+<section id="mains">
+<h3 class="font-headline-md text-headline-md mb-md">Main Course</h3>
+<div class="space-y-md">
+<!-- List Item Style -->
+<div class="flex justify-between items-start py-md border-b border-outline-variant/20 group">
+<div class="max-w-[70%]">
+<div class="flex items-center gap-xs mb-xs">
+<span class="w-3 h-3 border border-green-600 flex items-center justify-center p-[1px]"><span class="w-full h-full bg-green-600 rounded-full"></span></span>
+<span class="text-[10px] font-bold text-green-600 uppercase tracking-widest">Veg</span>
+</div>
+<h4 class="font-label-md text-on-surface group-hover:text-primary transition-colors">Dal Makhani Special</h4>
+<p class="text-on-surface-variant font-body-sm mt-1">Overnight slow-cooked black lentils with cream and dollops of butter.</p>
+<p class="font-label-md text-on-surface mt-2">₹220</p>
+</div>
+<div class="relative w-24 h-24">
+<img class="w-full h-full object-cover rounded-lg" data-alt="A small black bowl of creamy Dal Makhani topped with fresh cream and ginger juliennes. Placed on a rustic wooden board with naan bread pieces. Moody restaurant lighting, high-end food commercial style, orange and neutral palette." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCv0kmSpfugcAv-KXjZmr-J_KFbICHVSM-9XHqwZn1taXrzR01rC7Sq0ohjtZCOhSBhd2Wao5XK5xRFipyh5kRgyjVzgw1mYGCGYWM8PK3I8TwjEz6A_Y4rCCJ_jPRyxZjz-snXiiYaB6_N6FICNgUfCP-FE6XDvPtb4mTQKywiqGnSG5aPTPoK8HJ7_bK6eKZT9PPPb0btjWBesZQNYT8FnLC0TL4vjfBTr_RB7fG1OO6kS-1Hpx2RBcGBl0aXK4JjwhU4yZnjfA"/>
+<button class="absolute -bottom-2 left-1/2 -translate-x-1/2 bg-white text-primary border border-primary-container shadow-md px-5 py-1 rounded-lg font-bold text-sm hover:bg-primary-fixed transition-colors" onclick="addToCart(this)">
+                                    ADD
+                                </button>
+<div class="hidden absolute -bottom-2 left-1/2 -translate-x-1/2 bg-primary text-white shadow-md flex items-center rounded-lg overflow-hidden">
+<button class="px-3 py-1" onclick="decrement(this)">-</button>
+<span class="px-2 font-bold qty">1</span>
+<button class="px-3 py-1" onclick="increment(this)">+</button>
+</div>
+</div>
+</div>
+<div class="flex justify-between items-start py-md border-b border-outline-variant/20 group">
+<div class="max-w-[70%]">
+<div class="flex items-center gap-xs mb-xs">
+<span class="w-3 h-3 border border-red-600 flex items-center justify-center p-[1px]"><span class="w-full h-full bg-red-600 rounded-full"></span></span>
+<span class="text-[10px] font-bold text-red-600 uppercase tracking-widest">Non-Veg</span>
+</div>
+<h4 class="font-label-md text-on-surface group-hover:text-primary transition-colors">Kadai Murg</h4>
+<p class="text-on-surface-variant font-body-sm mt-1">Chicken pieces tossed with bell peppers and onion in a spicy masala.</p>
+<p class="font-label-md text-on-surface mt-2">₹320</p>
+</div>
+<div class="relative w-24 h-24">
+<img class="w-full h-full object-cover rounded-lg" data-alt="Sizzling Kadai Chicken served in a traditional iron wok (kadai), garnished with bell peppers and cilantro. Dramatic lighting with steam rising from the dish. Professional food styling, FRETZA brand colors, high quality 8k render." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCjV30BzP-9o9UjLCOoDTzFRsxwF3kLpBgVWhoXJ61GxsCs3gCRpJ5_RkfDsLa0waPU_egtw8tag3gbC4gLKviMV4oJgKHEba1u31_-s3Qqt65O-SHh4EvwUng-EdcIR4jJc59tus-IQ8req5N3DxvG0udamx5a9b7QscO_IQ77QHyFW7WxdFU5YUHGbc_qRqFRKr9Vixz3A0LAZwUqTFAnihh6vYR4lGwY_bulBpbJ9EJanhkbw8TjhlU0L73jd6USVojBGr3ZGA"/>
+<button class="absolute -bottom-2 left-1/2 -translate-x-1/2 bg-white text-primary border border-primary-container shadow-md px-5 py-1 rounded-lg font-bold text-sm hover:bg-primary-fixed transition-colors" onclick="addToCart(this)">
+                                    ADD
+                                </button>
+<div class="hidden absolute -bottom-2 left-1/2 -translate-x-1/2 bg-primary text-white shadow-md flex items-center rounded-lg overflow-hidden">
+<button class="px-3 py-1" onclick="decrement(this)">-</button>
+<span class="px-2 font-bold qty">1</span>
+<button class="px-3 py-1" onclick="increment(this)">+</button>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Beverages -->
+<section id="beverages">
+<h3 class="font-headline-md text-headline-md mb-md">Beverages</h3>
+<div class="grid grid-cols-2 md:grid-cols-3 gap-md">
+<div class="flex flex-col items-center text-center group">
+<div class="relative w-full aspect-square mb-sm">
+<img class="w-full h-full object-cover rounded-xl group-hover:scale-95 transition-transform duration-300" data-alt="A tall glass of frothy sweet lassi garnished with saffron strands and pistachios. Water droplets on the glass indicate freshness. Bright, airy, light-mode commercial photography, minimalist background." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBJxQzg9I1VjsjXr7OQfVKA7x558S_67KzLNGihMOG8nC75yBf4QIF7YqM-99dyrKl5c5KhhP-DbA8n3Z6Bdsl1k4lHvGEGvu5nlb9Kv-dKpXfd2sMgKIpunuACOjDWVrZSJM4uwC2eztiDiU5KxEW6Mel7ScpmSPuxP7ag-eJRLwN45cIFscNG428g9XQ9TWRZC4njHDO1O6z8q6d2AV3XCa4k8ujU_Xk0VnWNrK1VRSHsicvYtVaki8yagJVYklXmp77DUktVlg"/>
+<button class="absolute bottom-2 right-2 bg-white text-primary p-2 rounded-full shadow-md hover:bg-primary-container transition-all active:scale-90" onclick="addToCart(this)">
+<span class="material-symbols-outlined">add</span>
+</button>
+</div>
+<h4 class="font-label-md text-on-surface">Sweet Saffron Lassi</h4>
+<p class="text-on-surface-variant font-label-sm">₹80</p>
+</div>
+<div class="flex flex-col items-center text-center group">
+<div class="relative w-full aspect-square mb-sm">
+<img class="w-full h-full object-cover rounded-xl group-hover:scale-95 transition-transform duration-300" data-alt="A refreshing glass of fresh lime soda with mint leaves and a lemon slice. Sparkling bubbles and ice cubes visible. Summer vibe, vibrant colors, high-end lifestyle food photography for FRETZA." src="https://lh3.googleusercontent.com/aida-public/AB6AXuD7en1u4OajAGBkAP16TodxPd8YNN4BEjnv-Wwc4IG-YnymcUTVxwJvZtiRwGW2yrOYav-bARq-QCJPWj20_GCuOS4oWZtJOsGRiCM-_qcUJ5GbYNpPlEsuXMZbSH3CQZ6EJ1RYFf8wFOAB-Y8p_cRcxk_T9M6tjPpv3vJ7z4c9L4l02hGn7UyctBSJYOLyYpkiRa-Sf2X1D-NO2OOiwKrd_5f0TarULYN-lAVKEdhrG-gE_XfKtjwins6XYPwZ0nEguprGIhPO8w"/>
+<button class="absolute bottom-2 right-2 bg-white text-primary p-2 rounded-full shadow-md hover:bg-primary-container transition-all active:scale-90" onclick="addToCart(this)">
+<span class="material-symbols-outlined">add</span>
+</button>
+</div>
+<h4 class="font-label-md text-on-surface">Fresh Lime Soda</h4>
+<p class="text-on-surface-variant font-label-sm">₹60</p>
+</div>
+</div>
+</section>
+</div>
+<!-- Desktop Sidebar Cart (Bento style) -->
+<aside class="hidden lg:block lg:col-span-4">
+<div class="sticky top-[150px] space-y-md">
+<div class="bg-surface-container p-lg rounded-xl border border-outline-variant/30">
+<div class="flex items-center gap-sm mb-md">
+<span class="material-symbols-outlined text-primary">shopping_bag</span>
+<h3 class="font-headline-md text-headline-md">Your Order</h3>
+</div>
+<!-- Empty Cart State -->
+<div class="flex flex-col items-center py-xl text-center" id="empty-cart-msg">
+<span class="material-symbols-outlined text-4xl text-on-surface-variant mb-sm">shopping_cart</span>
+<p class="text-on-surface-variant font-body-sm">Your basket is waiting to be filled with deliciousness!</p>
+</div>
+<!-- Cart Items (Hidden by default) -->
+<div class="hidden space-y-md" id="cart-list">
+<!-- JS will populate this -->
+</div>
+<div class="mt-xl pt-lg border-t border-outline-variant/30">
+<div class="flex justify-between font-label-md text-on-surface-variant mb-xs">
+<span>Subtotal</span>
+<span id="cart-subtotal">₹0</span>
+</div>
+<div class="flex justify-between font-label-md text-on-surface-variant mb-md">
+<span>Delivery Fee</span>
+<span>₹25</span>
+</div>
+<div class="flex justify-between font-headline-md text-headline-md text-on-surface">
+<span>Total</span>
+<span id="cart-total">₹0</span>
+</div>
+<button class="w-full mt-lg bg-primary py-md rounded-xl text-white font-bold hover:bg-on-primary-fixed-variant transition-all active:scale-[0.98] shadow-lg shadow-primary/20">
+                                Checkout Now
+                            </button>
+</div>
+</div>
+<!-- Offers Card -->
+<div class="bg-primary-container/20 p-lg rounded-xl border border-primary/20">
+<div class="flex items-center gap-sm text-primary mb-sm">
+<span class="material-symbols-outlined">local_offer</span>
+<span class="font-label-md">Offers For You</span>
+</div>
+<p class="font-label-md text-on-primary-container">Use code <span class="font-black">FRETZA50</span> to get 50% off up to ₹100 on orders above ₹400.</p>
+</div>
+</div>
+</aside>
+</div>
+</main>
+<!-- Mobile View Cart Bar (Glassmorphism) -->
+<div class="fixed bottom-gutter left-gutter right-gutter z-50 glass rounded-2xl shadow-2xl border border-white/30 p-md hidden flex justify-between items-center transform translate-y-32 transition-all duration-500" id="mobile-cart-bar">
+<div class="flex items-center gap-md">
+<div class="bg-primary text-white w-10 h-10 rounded-full flex items-center justify-center font-bold" id="mobile-cart-count">1</div>
+<div>
+<p class="font-label-md text-on-surface" id="mobile-cart-total">₹280</p>
+<p class="text-[10px] uppercase font-bold text-on-surface-variant">Plus Taxes</p>
+</div>
+</div>
+<button class="bg-primary text-white px-8 py-3 rounded-xl font-bold flex items-center gap-sm active:scale-95 transition-transform">
+            VIEW CART
+            <span class="material-symbols-outlined text-[18px]">shopping_cart</span>
+</button>
+</div>
+<!-- Bottom Navigation (Shared Component Placeholder Logic) -->
+<!-- Not rendered as this is a focused task page (Restaurant Details) -->
+<script>
+        let cart = [];
+        const cartList = document.getElementById('cart-list');
+        const emptyCartMsg = document.getElementById('empty-cart-msg');
+        const subtotalEl = document.getElementById('cart-subtotal');
+        const totalEl = document.getElementById('cart-total');
+        const mobileCartBar = document.getElementById('mobile-cart-bar');
+        const mobileTotalEl = document.getElementById('mobile-cart-total');
+        const mobileCountEl = document.getElementById('mobile-cart-count');
+
+        function addToCart(btn) {
+            const container = btn.closest('.relative');
+            const itemContainer = btn.closest('div').parentElement;
+            const title = itemContainer.querySelector('h4').innerText;
+            const price = parseInt(itemContainer.querySelector('.font-label-md:last-of-type').innerText.replace('₹', ''));
+            
+            // UI Toggle
+            btn.classList.add('hidden');
+            const qtyControl = btn.nextElementSibling;
+            qtyControl.classList.remove('hidden');
+            qtyControl.classList.add('flex');
+
+            updateCart(title, price, 1);
+        }
+
+        function increment(btn) {
+            const qtyEl = btn.parentElement.querySelector('.qty');
+            let qty = parseInt(qtyEl.innerText);
+            qty++;
+            qtyEl.innerText = qty;
+            
+            const title = btn.closest('div').parentElement.parentElement.querySelector('h4').innerText;
+            updateCart(title, null, 1);
+        }
+
+        function decrement(btn) {
+            const qtyEl = btn.parentElement.querySelector('.qty');
+            let qty = parseInt(qtyEl.innerText);
+            const title = btn.closest('div').parentElement.parentElement.querySelector('h4').innerText;
+            
+            if (qty > 1) {
+                qty--;
+                qtyEl.innerText = qty;
+                updateCart(title, null, -1);
+            } else {
+                // Return to ADD button
+                const qtyControl = btn.parentElement;
+                qtyControl.classList.remove('flex');
+                qtyControl.classList.add('hidden');
+                qtyControl.previousElementSibling.classList.remove('hidden');
+                updateCart(title, null, -1);
+            }
+        }
+
+        function updateCart(title, price, change) {
+            const existingItem = cart.find(item => item.title === title);
+            
+            if (existingItem) {
+                existingItem.qty += change;
+                if (existingItem.qty <= 0) {
+                    cart = cart.filter(item => item.title !== title);
+                }
+            } else {
+                cart.push({ title, price, qty: 1 });
+            }
+
+            renderCart();
+        }
+
+        function renderCart() {
+            if (cart.length === 0) {
+                emptyCartMsg.classList.remove('hidden');
+                cartList.classList.add('hidden');
+                mobileCartBar.classList.add('translate-y-32');
+                mobileCartBar.classList.add('hidden');
+                subtotalEl.innerText = '₹0';
+                totalEl.innerText = '₹0';
+                return;
+            }
+
+            emptyCartMsg.classList.add('hidden');
+            cartList.classList.remove('hidden');
+            mobileCartBar.classList.remove('hidden');
+            setTimeout(() => mobileCartBar.classList.remove('translate-y-32'), 10);
+
+            cartList.innerHTML = cart.map(item => `
+                <div class="flex justify-between items-center text-on-surface">
+                    <div class="flex-1">
+                        <p class="font-label-md">${item.title}</p>
+                        <p class="text-xs text-on-surface-variant">Qty: ${item.qty}</p>
+                    </div>
+                    <p class="font-label-md">₹${item.price * item.qty}</p>
+                </div>
+            `).join('');
+
+            const subtotal = cart.reduce((acc, item) => acc + (item.price * item.qty), 0);
+            subtotalEl.innerText = `₹${subtotal}`;
+            totalEl.innerText = `₹${subtotal + 25}`;
+            
+            mobileTotalEl.innerText = `₹${subtotal + 25}`;
+            mobileCountEl.innerText = cart.reduce((acc, item) => acc + item.qty, 0);
+        }
+
+        // Simple Smooth Scroll Logic for categories
+        document.querySelectorAll('nav a').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                const offset = 140;
+                const bodyRect = document.body.getBoundingClientRect().top;
+                const elementRect = target.getBoundingClientRect().top;
+                const elementPosition = elementRect - bodyRect;
+                const offsetPosition = elementPosition - offset;
+
+                window.scrollTo({
+                    top: offsetPosition,
+                    behavior: 'smooth'
+                });
+
+                // Update active state
+                document.querySelectorAll('nav a').forEach(a => {
+                    a.classList.remove('bg-primary-container', 'text-on-primary-container');
+                    a.classList.add('bg-surface-container-high', 'text-on-surface-variant');
+                });
+                this.classList.remove('bg-surface-container-high', 'text-on-surface-variant');
+                this.classList.add('bg-primary-container', 'text-on-primary-container');
+            });
+        });
+    </script>
+</body></html>
