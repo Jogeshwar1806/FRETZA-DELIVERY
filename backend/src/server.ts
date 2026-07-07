@@ -65,8 +65,11 @@ app.use(notFoundHandler);
 app.use(errorHandler);
 
 // Listen
-app.listen(PORT, () => {
-  console.log(`FRETZA Backend Server listening on http://localhost:${PORT}`);
-});
+// Listen only if not on Vercel
+if (process.env.NODE_ENV !== 'production' || !process.env.VERCEL) {
+  app.listen(PORT, () => {
+    console.log(`FRETZA Backend Server listening on http://localhost:${PORT}`);
+  });
+}
 
 export default app;
