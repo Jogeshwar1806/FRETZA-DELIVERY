@@ -66,3 +66,5 @@ app.use(errorHandler);
 app.listen(PORT, () => {
   console.log(`FRETZA Backend Server listening on http://localhost:${PORT}`);
 });
+
+export default app;
