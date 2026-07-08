@@ -9,7 +9,8 @@ export interface IFoodItem extends Document {
   isVeg: boolean;
   category: string;
   popular?: boolean;
-  restaurantId: mongoose.Types.ObjectId;
+  restaurantId?: mongoose.Types.ObjectId;
+  ownerId: mongoose.Types.ObjectId;
   discountPrice?: number;
   preparationTime?: string;
   availableQuantity?: number;
@@ -59,7 +60,13 @@ const FoodItemSchema = new Schema<IFoodItem>(
     restaurantId: {
       type: Schema.Types.ObjectId,
       ref: 'Restaurant',
-      required: true,
+      required: false,
+      default: null,
+    },
+    ownerId: {
+      type: Schema.Types.ObjectId,
+      ref: 'User',
+      required: [true, 'Food item must belong to an owner (merchant)'],
     },
     discountPrice: {
       type: Number,

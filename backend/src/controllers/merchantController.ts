@@ -14,7 +14,14 @@ const getMerchantRestaurant = async (req: AuthenticatedRequest, next: NextFuncti
   }
   const restaurant = await Restaurant.findOne({ ownerId: req.user.id });
   if (!restaurant) {
-    throw new AppError('No restaurant associated with this merchant account', 404);
+    const defaultRestaurant = await Restaurant.create({
+      ownerId: req.user.id,
+      name: 'My Restaurant',
+      cuisine: 'North Indian',
+      address: 'Placeholder Address',
+      status: 'Open',
+    });
+    return defaultRestaurant;
   }
   return restaurant;
 };
@@ -84,11 +91,92 @@ export const createRestaurantProfile = async (req: AuthenticatedRequest, res: Re
   }
 };
 
+// --- MULTI-RESTAURANT CRUD ---
+export const getRestaurantsList = async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
+  try {
+    if (!req.user) return next(new AppError('Unauthorized', 401));
+    const restaurants = await Restaurant.find({ ownerId: req.user.id });
+    res.status(200).json({ success: true, count: restaurants.length, restaurants });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const createRestaurant = async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
+  try {
+    if (!req.user) return next(new AppError('Unauthorized', 401));
+    const restaurant = await Restaurant.create({
+      ...req.body,
+      ownerId: req.user.id,
+      rating: 4.0,
+      deliveryTime: req.body.deliveryTime || '25-30 min',
+      distance: req.body.distance || '1.0 km',
+      costForTwo: req.body.costForTwo || 250,
+      status: req.body.status || 'Open',
+    });
+    res.status(201).json({
+      success: true,
+      message: 'Restaurant created successfully',
+      restaurant,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const updateRestaurant = async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
+  try {
+    if (!req.user) return next(new AppError('Unauthorized', 401));
+    const { id } = req.params;
+    const restaurant = await Restaurant.findOne({ _id: id, ownerId: req.user.id });
+    if (!restaurant) {
+      return next(new AppError('Restaurant not found or unauthorized', 404));
+    }
+    const updates = req.body;
+    delete updates.ownerId;
+    delete updates.rating;
+
+    const updated = await Restaurant.findByIdAndUpdate(id, updates, {
+      new: true,
+      runValidators: true,
+    });
+    res.status(200).json({
+      success: true,
+      message: 'Restaurant updated successfully',
+      restaurant: updated,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const deleteRestaurant = async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
+  try {
+    if (!req.user) return next(new AppError('Unauthorized', 401));
+    const { id } = req.params;
+    const restaurant = await Restaurant.findOne({ _id: id, ownerId: req.user.id });
+    if (!restaurant) {
+      return next(new AppError('Restaurant not found or unauthorized', 404));
+    }
+    await Restaurant.findByIdAndDelete(id);
+
+    // Set restaurantId to null for all matching food items
+    await FoodItem.updateMany({ restaurantId: id }, { $set: { restaurantId: null } });
+
+    res.status(200).json({
+      success: true,
+      message: 'Restaurant deleted successfully',
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
 // --- MENU CRUD ---
 export const getMenu = async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
   try {
-    const restaurant = await getMerchantRestaurant(req, next);
-    const foodItems = await FoodItem.find({ restaurantId: restaurant._id });
+    if (!req.user) return next(new AppError('Unauthorized', 401));
+    const foodItems = await FoodItem.find({ ownerId: req.user.id });
     res.status(200).json({ success: true, count: foodItems.length, menu: foodItems });
   } catch (error) {
     next(error);
@@ -97,7 +185,7 @@ export const getMenu = async (req: AuthenticatedRequest, res: Response, next: Ne
 
 export const addMenuItem = async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
   try {
-    const restaurant = await getMerchantRestaurant(req, next);
+    if (!req.user) return next(new AppError('Unauthorized', 401));
     const {
       name,
       description,
@@ -112,7 +200,15 @@ export const addMenuItem = async (req: AuthenticatedRequest, res: Response, next
       bestSeller,
       recommended,
       todaySpecial,
+      restaurantId,
     } = req.body;
+
+    if (restaurantId) {
+      const owned = await Restaurant.findOne({ _id: restaurantId, ownerId: req.user.id });
+      if (!owned) {
+        return next(new AppError('Access denied: Unauthorized restaurant linkage', 403));
+      }
+    }
 
     const item = await FoodItem.create({
       name,
@@ -128,7 +224,8 @@ export const addMenuItem = async (req: AuthenticatedRequest, res: Response, next
       bestSeller: !!bestSeller,
       recommended: !!recommended,
       todaySpecial: !!todaySpecial,
-      restaurantId: restaurant._id,
+      restaurantId: restaurantId || null,
+      ownerId: req.user.id,
     });
 
     res.status(201).json({
@@ -143,10 +240,18 @@ export const addMenuItem = async (req: AuthenticatedRequest, res: Response, next
 
 export const updateMenuItem = async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
   try {
-    const restaurant = await getMerchantRestaurant(req, next);
+    if (!req.user) return next(new AppError('Unauthorized', 401));
     const { itemId } = req.params;
+    const { restaurantId } = req.body;
 
-    const item = await FoodItem.findOne({ _id: itemId, restaurantId: restaurant._id });
+    if (restaurantId) {
+      const owned = await Restaurant.findOne({ _id: restaurantId, ownerId: req.user.id });
+      if (!owned) {
+        return next(new AppError('Access denied: Unauthorized restaurant linkage', 403));
+      }
+    }
+
+    const item = await FoodItem.findOne({ _id: itemId, ownerId: req.user.id });
     if (!item) {
       return next(new AppError('Food item not found in your menu', 404));
     }
@@ -168,10 +273,10 @@ export const updateMenuItem = async (req: AuthenticatedRequest, res: Response, n
 
 export const deleteMenuItem = async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
   try {
-    const restaurant = await getMerchantRestaurant(req, next);
+    if (!req.user) return next(new AppError('Unauthorized', 401));
     const { itemId } = req.params;
 
-    const item = await FoodItem.findOneAndDelete({ _id: itemId, restaurantId: restaurant._id });
+    const item = await FoodItem.findOneAndDelete({ _id: itemId, ownerId: req.user.id });
     if (!item) {
       return next(new AppError('Food item not found in your menu', 404));
     }

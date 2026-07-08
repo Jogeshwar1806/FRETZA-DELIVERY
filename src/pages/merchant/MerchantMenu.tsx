@@ -35,6 +35,7 @@ interface FoodItemFields {
   bestSeller: boolean;
   recommended: boolean;
   todaySpecial: boolean;
+  restaurantId?: string;
 }
 
 export const MerchantMenu: React.FC = () => {
@@ -65,7 +66,17 @@ export const MerchantMenu: React.FC = () => {
     },
   });
 
+  // Fetch Restaurants
+  const { data: restaurantsData } = useQuery({
+    queryKey: ['merchant-restaurants'],
+    queryFn: async () => {
+      const res = await api.get('/merchant/restaurants');
+      return res.data.restaurants || [];
+    },
+  });
+
   const categories = catData || [];
+  const restaurantsList = restaurantsData || [];
 
   // Register Form
   const {
@@ -185,6 +196,7 @@ export const MerchantMenu: React.FC = () => {
       bestSeller: false,
       recommended: false,
       todaySpecial: false,
+      restaurantId: '',
     });
     setModalOpen(true);
   };
@@ -323,6 +335,11 @@ export const MerchantMenu: React.FC = () => {
                           <p className="text-[10px] text-secondary truncate max-w-[180px] mt-0.5">
                             {item.description || 'No description'}
                           </p>
+                          {item.restaurantId && (
+                            <span className="text-[9px] text-primary bg-orange-50 px-1.5 py-0.5 rounded-md font-bold mt-1 inline-block">
+                              🏪 {restaurantsList.find((r: any) => r._id === item.restaurantId)?.name || 'Linked Restaurant'}
+                            </span>
+                          )}
                         </div>
                       </div>
                     </td>
@@ -492,6 +509,22 @@ export const MerchantMenu: React.FC = () => {
                     {categories.map((c: any) => (
                       <option key={c._id} value={c.name.toLowerCase()}>
                         {c.name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                {/* Link to Restaurant */}
+                <div className="space-y-1.5">
+                  <label className="block text-[10px] font-bold text-gray-500 uppercase">Link to Restaurant</label>
+                  <select
+                    {...register('restaurantId')}
+                    className="w-full bg-surface-container-low border border-outline-variant/30 rounded-xl px-3 py-2 text-xs focus:ring-1 focus:ring-primary focus:outline-none"
+                  >
+                    <option value="">None (General menu item)</option>
+                    {restaurantsList.map((r: any) => (
+                      <option key={r._id} value={r._id}>
+                        {r.name}
                       </option>
                     ))}
                   </select>

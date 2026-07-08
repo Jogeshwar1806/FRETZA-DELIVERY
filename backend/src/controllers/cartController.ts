@@ -136,7 +136,7 @@ export const addToCart = async (req: AuthenticatedRequest, res: Response, next: 
     }
 
     // Check if item is from a different restaurant
-    if (cart.restaurantId && cart.restaurantId.toString() !== food.restaurantId.toString() && cart.items.length > 0) {
+    if (cart.restaurantId && food.restaurantId && cart.restaurantId.toString() !== food.restaurantId.toString() && cart.items.length > 0) {
       return res.status(400).json({
         success: false,
         clearCartRequired: true,
@@ -146,7 +146,7 @@ export const addToCart = async (req: AuthenticatedRequest, res: Response, next: 
 
     // Assign restaurant if cart empty
     if (cart.items.length === 0) {
-      cart.restaurantId = food.restaurantId;
+      cart.restaurantId = food.restaurantId || null;
     }
 
     // Add or increment

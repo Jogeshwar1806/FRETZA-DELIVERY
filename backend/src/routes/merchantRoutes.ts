@@ -9,6 +9,10 @@ import {
   getRestaurantProfile,
   updateRestaurantProfile,
   createRestaurantProfile,
+  getRestaurantsList,
+  createRestaurant,
+  updateRestaurant,
+  deleteRestaurant,
   getMenu,
   addMenuItem,
   updateMenuItem,
@@ -68,10 +72,15 @@ const upload = multer({
 router.use(protect);
 router.use(restrictTo('Restaurant Owner'));
 
-// --- PROFILE ---
+// --- PROFILE & MULTI-RESTAURANT CRUD ---
 router.get('/profile', getRestaurantProfile);
 router.put('/profile', updateRestaurantProfile);
 router.post('/profile', createRestaurantProfile);
+
+router.get('/restaurants', getRestaurantsList);
+router.post('/restaurants', createRestaurant);
+router.put('/restaurants/:id', updateRestaurant);
+router.delete('/restaurants/:id', deleteRestaurant);
 
 // --- MENU CRUD ---
 router.get('/menu', getMenu);

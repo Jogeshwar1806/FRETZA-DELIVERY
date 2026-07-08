@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import bcryptjs from 'bcryptjs';
 import { User } from '../models/userModel.js';
+import { Restaurant } from '../models/restaurantModel.js';
 import { signToken } from '../utils/jwt.js';
 import { AppError } from '../middleware/errorMiddleware.js';
 import { AuthenticatedRequest } from '../middleware/authMiddleware.js';
@@ -70,6 +71,28 @@ export const register = async (req: Request, res: Response, next: NextFunction) 
       deliveryProfile,
       merchantProfile,
     });
+
+    // Auto-create Restaurant for Merchant Owner
+    if (normalizedRole === 'restaurant_owner' || normalizedRole === 'restaurant owner') {
+      const restName = req.body.restaurantName || (merchantProfile && (merchantProfile as any).restaurantName) || 'My Restaurant';
+      await Restaurant.create({
+        ownerId: user._id,
+        name: restName,
+        cuisine: 'North Indian, Chinese',
+        address: 'Store Address Placeholder',
+        description: 'Provide a description for your restaurant here',
+        logo: '',
+        coverImage: '',
+        openingTime: '09:00 AM',
+        closingTime: '10:00 PM',
+        deliveryRadius: 5,
+        deliveryTime: '25-30 min',
+        rating: 4.0,
+        distance: '1.2 km',
+        costForTwo: 250,
+        status: 'Open',
+      });
+    }
 
     const token = signToken({ id: user.id, role: user.role });
 
