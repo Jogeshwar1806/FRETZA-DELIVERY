@@ -60,7 +60,7 @@ export const Login: React.FC = () => {
         } else if (normalizedRole === 'admin') {
           navigate('/admin');
         } else {
-          navigate('/home');
+          navigate('/customer');
         }
       }
     } catch (err) {

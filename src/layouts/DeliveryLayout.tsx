@@ -23,9 +23,12 @@ export const DeliveryLayout: React.FC = () => {
       if (!isAuthenticated) {
         showToast('Please login to access Rider Portal', 'warning');
         navigate('/login');
-      } else if (currentUser?.role !== 'Delivery Partner') {
-        showToast('Unauthorized. Riders only.', 'error');
-        navigate('/home');
+      } else {
+        const normalizedRole = currentUser?.role?.toLowerCase();
+        if (normalizedRole !== 'driver' && normalizedRole !== 'delivery partner') {
+          showToast('Unauthorized. Riders only.', 'error');
+          navigate('/home');
+        }
       }
     }
   }, [isAuthenticated, currentUser, isLoading, navigate, showToast]);
@@ -36,7 +39,8 @@ export const DeliveryLayout: React.FC = () => {
     navigate('/login');
   };
 
-  if (isLoading || !isAuthenticated || currentUser?.role !== 'Delivery Partner') {
+  const normalizedRole = currentUser?.role?.toLowerCase();
+  if (isLoading || !isAuthenticated || (normalizedRole !== 'driver' && normalizedRole !== 'delivery partner')) {
     return (
       <div className="h-screen flex items-center justify-center bg-gray-50">
         <div className="text-center space-y-4">

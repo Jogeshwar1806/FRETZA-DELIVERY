@@ -27,9 +27,12 @@ export const AdminLayout: React.FC = () => {
       if (!isAuthenticated) {
         showToast('Please login to access Admin portal', 'warning');
         navigate('/login');
-      } else if (currentUser?.role !== 'Admin') {
-        showToast('Unauthorized. Admins only.', 'error');
-        navigate('/home');
+      } else {
+        const normalizedRole = currentUser?.role?.toLowerCase();
+        if (normalizedRole !== 'admin') {
+          showToast('Unauthorized. Admins only.', 'error');
+          navigate('/home');
+        }
       }
     }
   }, [isAuthenticated, currentUser, isLoading, navigate, showToast]);
@@ -40,7 +43,8 @@ export const AdminLayout: React.FC = () => {
     navigate('/login');
   };
 
-  if (isLoading || !isAuthenticated || currentUser?.role !== 'Admin') {
+  const normalizedRole = currentUser?.role?.toLowerCase();
+  if (isLoading || !isAuthenticated || normalizedRole !== 'admin') {
     return (
       <div className="h-screen flex items-center justify-center bg-gray-50">
         <div className="text-center space-y-4">

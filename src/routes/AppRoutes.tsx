@@ -53,6 +53,7 @@ export const AppRoutes: React.FC = () => {
       {/* Pages inside Main Customer layout grid */}
       <Route element={<MainLayout />}>
         <Route path="/home" element={<Home />} />
+        <Route path="/customer" element={<Home />} />
         <Route path="/restaurants" element={<RestaurantListing />} />
         <Route path="/restaurant/:id" element={<RestaurantDetails />} />
         <Route path="/search" element={<Search />} />
@@ -79,6 +80,7 @@ export const AppRoutes: React.FC = () => {
       {/* Delivery Partner Routes */}
       <Route element={<DeliveryLayout />}>
         <Route path="/delivery" element={<DeliveryDashboard />} />
+        <Route path="/driver" element={<DeliveryDashboard />} />
         <Route path="/delivery/active" element={<ActiveDelivery />} />
         <Route path="/delivery/history" element={<DeliveryHistory />} />
         <Route path="/delivery/profile" element={<DeliveryProfile />} />

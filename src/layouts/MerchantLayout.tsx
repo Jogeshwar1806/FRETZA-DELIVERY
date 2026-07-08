@@ -24,9 +24,12 @@ export const MerchantLayout: React.FC = () => {
     if (!isLoading) {
       if (!isAuthenticated) {
         navigate('/login');
-      } else if (currentUser && currentUser.role !== 'Restaurant Owner') {
-        showToast('Unauthorized access. Customers are redirected to the Home Page.', 'error');
-        navigate('/home');
+      } else if (currentUser) {
+        const normalizedRole = currentUser.role?.toLowerCase();
+        if (normalizedRole !== 'restaurant_owner' && normalizedRole !== 'restaurant owner') {
+          showToast('Unauthorized access. Redirected to the Home Page.', 'error');
+          navigate('/home');
+        }
       }
     }
   }, [isAuthenticated, currentUser, isLoading, navigate]);
@@ -37,7 +40,8 @@ export const MerchantLayout: React.FC = () => {
     navigate('/login');
   };
 
-  if (isLoading || !currentUser || currentUser.role !== 'Restaurant Owner') {
+  const normalizedRole = currentUser?.role?.toLowerCase();
+  if (isLoading || !currentUser || (normalizedRole !== 'restaurant_owner' && normalizedRole !== 'restaurant owner')) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-surface-container-lowest">
         <div className="flex flex-col items-center gap-3">
