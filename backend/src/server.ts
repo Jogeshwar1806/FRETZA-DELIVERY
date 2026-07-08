@@ -53,8 +53,9 @@ app.use(morgan('dev'));
 app.use(express.json());
 app.use(cookieParser());
 
-// Static Files Serving
-app.use('/uploads', express.static(path.join(__dirname, '../public/uploads')));
+//  Static Files Serving
+const uploadDir = process.env.VERCEL ? path.join(os.tmpdir(), 'fretza-uploads') : path.join(__dirname, '../public/uploads');
+app.use('/uploads', express.static(uploadDir));
 
 // Mount API Routes
 app.use('/api/auth', authRoutes);
