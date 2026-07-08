@@ -48,9 +48,9 @@ const categoriesData = [
 
 const seedDB = async () => {
   try {
-    const connStr = process.env.MONGODB_URI || 'mongodb://localhost:27017/fretza';
+    const connStr = process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/fretza';
     await mongoose.connect(connStr);
-    console.log('Connected to MongoDB for seeding Phase 4...');
+    console.log('Connected to MongoDB for seeding...');
 
     // Clear existing data
     await User.deleteMany();
