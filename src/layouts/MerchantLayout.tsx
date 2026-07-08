@@ -11,6 +11,7 @@ import {
   BarChart3,
   LogOut,
   Bell,
+  HelpCircle,
 } from 'lucide-react';
 
 export const MerchantLayout: React.FC = () => {
@@ -59,6 +60,7 @@ export const MerchantLayout: React.FC = () => {
     { label: 'Categories', path: '/merchant/categories', icon: Folders },
     { label: 'Orders', path: '/merchant/orders', icon: ShoppingBag },
     { label: 'Analytics', path: '/merchant/analytics', icon: BarChart3 },
+    { label: 'Help & Support', path: '/feedback-help', icon: HelpCircle },
   ];
 
   return (

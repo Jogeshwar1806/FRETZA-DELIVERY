@@ -10,6 +10,7 @@ import {
   History,
   User,
   Activity,
+  HelpCircle,
 } from 'lucide-react';
 
 export const DeliveryLayout: React.FC = () => {
@@ -55,6 +56,7 @@ export const DeliveryLayout: React.FC = () => {
     { path: '/delivery', label: 'Dashboard', icon: LayoutDashboard },
     { path: '/delivery/history', label: 'History', icon: History },
     { path: '/delivery/profile', label: 'Rider Profile', icon: User },
+    { path: '/feedback-help', label: 'Help & Support', icon: HelpCircle },
   ];
 
   return (

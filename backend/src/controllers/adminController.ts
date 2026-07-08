@@ -5,6 +5,7 @@ import { Order } from '../models/orderModel.js';
 import { Coupon } from '../models/couponModel.js';
 import { Ticket } from '../models/ticketModel.js';
 import { AuditLog } from '../models/auditLogModel.js';
+import { Category } from '../models/categoryModel.js';
 import { PlatformSettings } from '../models/platformSettingsModel.js';
 import { logActivity } from '../utils/auditLogger.js';
 import { AuthenticatedRequest } from '../middleware/authMiddleware.js';
@@ -102,7 +103,7 @@ export const getPlatformUsers = async (req: AuthenticatedRequest, res: Response,
 export const updateUserRole = async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
   try {
     const { userId } = req.params;
-    const { role, isVerified, isOnline } = req.body;
+    const { role, isVerified, isOnline, verificationStatus } = req.body;
 
     const user = await User.findById(userId);
     if (!user) return next(new AppError('User not found', 404));
@@ -111,6 +112,9 @@ export const updateUserRole = async (req: AuthenticatedRequest, res: Response, n
     if (user.deliveryProfile) {
       if (isVerified !== undefined) user.deliveryProfile.isVerified = isVerified;
       if (isOnline !== undefined) user.deliveryProfile.isOnline = isOnline;
+    }
+    if (user.merchantProfile && verificationStatus !== undefined) {
+      user.merchantProfile.verificationStatus = verificationStatus;
     }
 
     await user.save();
@@ -336,6 +340,101 @@ export const getAuditLogs = async (req: AuthenticatedRequest, res: Response, nex
   try {
     const logs = await AuditLog.find().sort({ createdAt: -1 }).limit(100);
     res.status(200).json({ success: true, logs });
+  } catch (error) {
+    next(error);
+  }
+};
+
+// --- CATEGORIES ---
+export const getCategories = async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
+  try {
+    const categories = await Category.find().sort({ name: 1 });
+    res.status(200).json({ success: true, categories });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const createCategory = async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
+  try {
+    const { name, icon } = req.body;
+    if (!name) return next(new AppError('Please provide category name', 400));
+    
+    const existing = await Category.findOne({ name: { $regex: new RegExp(`^${name}$`, 'i') } });
+    if (existing) {
+      return next(new AppError('Category with this name already exists', 400));
+    }
+
+    const category = await Category.create({ name, icon: icon || 'restaurant' });
+    
+    await logActivity(
+      req.user!.id,
+      req.user!.name,
+      'Create Category',
+      'Categories',
+      `Created new master category: ${name}`
+    );
+
+    res.status(201).json({ success: true, message: 'Category created successfully', category });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const updateCategory = async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
+  try {
+    const { categoryId } = req.params;
+    const { name, icon } = req.body;
+
+    const category = await Category.findById(categoryId);
+    if (!category) return next(new AppError('Category not found', 404));
+
+    if (name) {
+      const existing = await Category.findOne({
+        name: { $regex: new RegExp(`^${name}$`, 'i') },
+        _id: { $ne: categoryId }
+      });
+      if (existing) {
+        return next(new AppError('Category with this name already exists', 400));
+      }
+      category.name = name;
+    }
+    if (icon) category.icon = icon;
+
+    await category.save();
+
+    await logActivity(
+      req.user!.id,
+      req.user!.name,
+      'Update Category',
+      'Categories',
+      `Updated category details for: ${category.name}`
+    );
+
+    res.status(200).json({ success: true, message: 'Category updated successfully', category });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const deleteCategory = async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
+  try {
+    const { categoryId } = req.params;
+
+    const category = await Category.findById(categoryId);
+    if (!category) return next(new AppError('Category not found', 404));
+
+    await Category.findByIdAndDelete(categoryId);
+
+    await logActivity(
+      req.user!.id,
+      req.user!.name,
+      'Delete Category',
+      'Categories',
+      `Deleted category: ${category.name}`
+    );
+
+    res.status(200).json({ success: true, message: 'Category deleted successfully' });
   } catch (error) {
     next(error);
   }

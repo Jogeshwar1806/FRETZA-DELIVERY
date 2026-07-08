@@ -16,6 +16,10 @@ import {
   getTickets,
   replyTicket,
   getAuditLogs,
+  getCategories,
+  createCategory,
+  updateCategory,
+  deleteCategory,
 } from '../controllers/adminController.js';
 
 const router = Router();
@@ -36,6 +40,10 @@ router.get('/coupons', getCoupons);
 router.post('/coupons', createCoupon);
 router.put('/coupons/:couponId', updateCoupon);
 router.delete('/coupons/:couponId', deleteCoupon);
+router.get('/categories', getCategories);
+router.post('/categories', createCategory);
+router.put('/categories/:categoryId', updateCategory);
+router.delete('/categories/:categoryId', deleteCategory);
 router.get('/tickets', getTickets);
 router.post('/tickets/:ticketId/reply', replyTicket);
 router.get('/audit', getAuditLogs);

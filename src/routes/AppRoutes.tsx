@@ -19,6 +19,7 @@ import { NotFound } from '../pages/NotFound';
 import { Checkout } from '../pages/Checkout';
 import { OrderDetails } from '../pages/OrderDetails';
 import { DeliveryLayout } from '../layouts/DeliveryLayout';
+import { FeedbackHelp } from '../pages/FeedbackHelp';
 
 // Import Merchant Pages
 import { MerchantDashboard } from '../pages/merchant/MerchantDashboard';
@@ -41,6 +42,7 @@ import { AdminUsers } from '../pages/admin/AdminUsers';
 import { AdminMerchants } from '../pages/admin/AdminMerchants';
 import { AdminOrders } from '../pages/admin/AdminOrders';
 import { AdminCoupons } from '../pages/admin/AdminCoupons';
+import { AdminCategories } from '../pages/admin/AdminCategories';
 import { AdminSupport } from '../pages/admin/AdminSupport';
 import { AdminSettings } from '../pages/admin/AdminSettings';
 
@@ -66,6 +68,8 @@ export const AppRoutes: React.FC = () => {
         <Route path="/checkout" element={<Checkout />} />
         <Route path="/order/:id" element={<OrderDetails />} />
       </Route>
+
+      <Route path="/feedback-help" element={<FeedbackHelp />} />
 
       {/* Merchant Dashboard Routes */}
       <Route element={<MerchantLayout />}>
@@ -93,6 +97,7 @@ export const AppRoutes: React.FC = () => {
         <Route path="/admin/merchants" element={<AdminMerchants />} />
         <Route path="/admin/orders" element={<AdminOrders />} />
         <Route path="/admin/coupons" element={<AdminCoupons />} />
+        <Route path="/admin/categories" element={<AdminCategories />} />
         <Route path="/admin/support" element={<AdminSupport />} />
         <Route path="/admin/settings" element={<AdminSettings />} />
       </Route>

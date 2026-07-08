@@ -94,14 +94,50 @@ export const getOrderById = async (req: AuthenticatedRequest, res: Response, nex
     if (!req.user) return next(new AppError('Unauthorized', 401));
     const { orderId } = req.params;
 
-    const order = await Order.findOne({ _id: orderId, userId: req.user.id });
+    const order = await Order.findById(orderId)
+      .populate('userId', 'name phone email')
+      .populate('restaurantId', 'address ownerId contactNumber distance');
+
     if (!order) {
       return next(new AppError('Order not found', 404));
     }
 
+    const normalizedRole = req.user.role?.toLowerCase();
+
+    // Authorization checks
+    if (normalizedRole === 'admin') {
+      // Admin can view everything
+    } else if (normalizedRole === 'delivery partner' || normalizedRole === 'driver') {
+      // Driver can view if they are assigned, or if the order is ready for pickup and unassigned
+      const isAssigned = order.deliveryPartnerId?.toString() === req.user.id;
+      const isAvailable = !order.deliveryPartnerId && order.status === 'Ready for Pickup';
+      if (!isAssigned && !isAvailable) {
+        return next(new AppError('Unauthorized to view this order', 403));
+      }
+    } else if (normalizedRole === 'restaurant_owner' || normalizedRole === 'restaurant owner') {
+      // Merchant can view if the order belongs to one of their restaurants
+      const restaurant = await Restaurant.findById(order.restaurantId);
+      if (!restaurant || restaurant.ownerId.toString() !== req.user.id) {
+        return next(new AppError('Unauthorized to view this order', 403));
+      }
+    } else {
+      // Customer can view if it's their order
+      if (order.userId._id.toString() !== req.user.id) {
+        return next(new AppError('Unauthorized to view this order', 403));
+      }
+    }
+
+    // Attach details as flat fields for ease of frontend consumption
+    const orderObj = order.toObject() as any;
+    orderObj.restaurantAddress = (order.restaurantId as any)?.address || '';
+    orderObj.restaurantPhone = (order.restaurantId as any)?.contactNumber || '';
+    orderObj.customerName = (order.userId as any)?.name || '';
+    orderObj.customerPhone = (order.userId as any)?.phone || '';
+    orderObj.distance = (order.restaurantId as any)?.distance || '1.5 km';
+
     res.status(200).json({
       success: true,
-      order,
+      order: orderObj,
     });
   } catch (error) {
     next(error);

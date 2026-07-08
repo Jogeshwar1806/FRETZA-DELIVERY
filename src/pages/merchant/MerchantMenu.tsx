@@ -277,7 +277,7 @@ export const MerchantMenu: React.FC = () => {
           >
             <option value="all">All Categories</option>
             {categories.map((c: any) => (
-              <option key={c._id} value={c.name.toLowerCase()}>
+              <option key={c._id} value={c.name}>
                 {c.name}
               </option>
             ))}
@@ -507,7 +507,7 @@ export const MerchantMenu: React.FC = () => {
                     className="w-full bg-surface-container-low border border-outline-variant/30 rounded-xl px-3 py-2 text-xs focus:ring-1 focus:ring-primary focus:outline-none"
                   >
                     {categories.map((c: any) => (
-                      <option key={c._id} value={c.name.toLowerCase()}>
+                      <option key={c._id} value={c.name}>
                         {c.name}
                       </option>
                     ))}

@@ -62,12 +62,25 @@ export const getAvailableOrders = async (req: AuthenticatedRequest, res: Respons
     const orders = await Order.find({
       status: 'Ready for Pickup',
       deliveryPartnerId: null,
-    }).sort({ createdAt: 1 });
+    })
+      .populate('restaurantId')
+      .populate('userId')
+      .sort({ createdAt: 1 });
+
+    const formattedOrders = orders.map((order) => {
+      const orderObj = order.toObject() as any;
+      orderObj.restaurantAddress = (order.restaurantId as any)?.address || '';
+      orderObj.restaurantPhone = (order.restaurantId as any)?.contactNumber || '';
+      orderObj.customerName = (order.userId as any)?.name || '';
+      orderObj.customerPhone = (order.userId as any)?.phone || '';
+      orderObj.distance = (order.restaurantId as any)?.distance || '1.5 km';
+      return orderObj;
+    });
 
     res.status(200).json({
       success: true,
-      count: orders.length,
-      orders,
+      count: formattedOrders.length,
+      orders: formattedOrders,
     });
   } catch (error) {
     next(error);
@@ -192,12 +205,25 @@ export const getDeliveryHistory = async (req: AuthenticatedRequest, res: Respons
     const orders = await Order.find({
       deliveryPartnerId: req.user.id,
       deliveryStatus: { $in: ['Delivered', 'Failed', 'Cancelled'] },
-    }).sort({ updatedAt: -1 });
+    })
+      .populate('restaurantId')
+      .populate('userId')
+      .sort({ updatedAt: -1 });
+
+    const formattedOrders = orders.map((order) => {
+      const orderObj = order.toObject() as any;
+      orderObj.restaurantAddress = (order.restaurantId as any)?.address || '';
+      orderObj.restaurantPhone = (order.restaurantId as any)?.contactNumber || '';
+      orderObj.customerName = (order.userId as any)?.name || '';
+      orderObj.customerPhone = (order.userId as any)?.phone || '';
+      orderObj.distance = (order.restaurantId as any)?.distance || '1.5 km';
+      return orderObj;
+    });
 
     res.status(200).json({
       success: true,
-      count: orders.length,
-      orders,
+      count: formattedOrders.length,
+      orders: formattedOrders,
     });
   } catch (error) {
     next(error);

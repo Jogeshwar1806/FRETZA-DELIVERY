@@ -90,9 +90,6 @@ router.delete('/menu/:itemId', deleteMenuItem);
 
 // --- CATEGORIES ---
 router.get('/categories', getCategories);
-router.post('/categories', addCategory);
-router.put('/categories/:id', updateCategory);
-router.delete('/categories/:id', deleteCategory);
 
 // --- ORDERS ---
 router.get('/orders', getOrders);

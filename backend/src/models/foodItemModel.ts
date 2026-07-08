@@ -10,7 +10,12 @@ export interface IFoodItem extends Document {
   category: string;
   popular?: boolean;
   restaurantId?: mongoose.Types.ObjectId;
+  restaurantName?: string;
   ownerId: mongoose.Types.ObjectId;
+  merchantId: mongoose.Types.ObjectId;
+  merchantName: string;
+  createdBy: mongoose.Types.ObjectId;
+  updatedBy: mongoose.Types.ObjectId;
   discountPrice?: number;
   preparationTime?: string;
   availableQuantity?: number;
@@ -63,10 +68,33 @@ const FoodItemSchema = new Schema<IFoodItem>(
       required: false,
       default: null,
     },
+    restaurantName: {
+      type: String,
+      default: '',
+    },
     ownerId: {
       type: Schema.Types.ObjectId,
       ref: 'User',
       required: [true, 'Food item must belong to an owner (merchant)'],
+    },
+    merchantId: {
+      type: Schema.Types.ObjectId,
+      ref: 'User',
+      required: [true, 'Food item must belong to a merchant'],
+    },
+    merchantName: {
+      type: String,
+      required: [true, 'Merchant name is required'],
+    },
+    createdBy: {
+      type: Schema.Types.ObjectId,
+      ref: 'User',
+      required: true,
+    },
+    updatedBy: {
+      type: Schema.Types.ObjectId,
+      ref: 'User',
+      required: true,
     },
     discountPrice: {
       type: Number,

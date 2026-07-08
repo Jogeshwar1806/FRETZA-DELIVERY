@@ -203,11 +203,13 @@ export const addMenuItem = async (req: AuthenticatedRequest, res: Response, next
       restaurantId,
     } = req.body;
 
+    let restaurantName = '';
     if (restaurantId) {
       const owned = await Restaurant.findOne({ _id: restaurantId, ownerId: req.user.id });
       if (!owned) {
         return next(new AppError('Access denied: Unauthorized restaurant linkage', 403));
       }
+      restaurantName = owned.name;
     }
 
     const item = await FoodItem.create({
@@ -225,7 +227,12 @@ export const addMenuItem = async (req: AuthenticatedRequest, res: Response, next
       recommended: !!recommended,
       todaySpecial: !!todaySpecial,
       restaurantId: restaurantId || null,
+      restaurantName,
       ownerId: req.user.id,
+      merchantId: req.user.id,
+      merchantName: req.user.name,
+      createdBy: req.user.id,
+      updatedBy: req.user.id,
     });
 
     res.status(201).json({
@@ -244,19 +251,30 @@ export const updateMenuItem = async (req: AuthenticatedRequest, res: Response, n
     const { itemId } = req.params;
     const { restaurantId } = req.body;
 
-    if (restaurantId) {
-      const owned = await Restaurant.findOne({ _id: restaurantId, ownerId: req.user.id });
-      if (!owned) {
-        return next(new AppError('Access denied: Unauthorized restaurant linkage', 403));
-      }
-    }
-
     const item = await FoodItem.findOne({ _id: itemId, ownerId: req.user.id });
     if (!item) {
       return next(new AppError('Food item not found in your menu', 404));
     }
 
-    const updated = await FoodItem.findByIdAndUpdate(itemId, req.body, {
+    let restaurantName = item.restaurantName || '';
+    if (restaurantId) {
+      const owned = await Restaurant.findOne({ _id: restaurantId, ownerId: req.user.id });
+      if (!owned) {
+        return next(new AppError('Access denied: Unauthorized restaurant linkage', 403));
+      }
+      restaurantName = owned.name;
+    }
+
+    const updates = { ...req.body };
+    delete updates.ownerId;
+    delete updates.merchantId;
+    delete updates.merchantName;
+    delete updates.createdBy;
+
+    updates.updatedBy = req.user.id;
+    updates.restaurantName = restaurantName;
+
+    const updated = await FoodItem.findByIdAndUpdate(itemId, updates, {
       new: true,
       runValidators: true,
     });

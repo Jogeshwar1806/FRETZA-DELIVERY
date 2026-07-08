@@ -14,6 +14,7 @@ import {
   Bell,
   Activity,
   ShieldCheck,
+  Folders,
 } from 'lucide-react';
 
 export const AdminLayout: React.FC = () => {
@@ -61,6 +62,7 @@ export const AdminLayout: React.FC = () => {
     { path: '/admin/merchants', label: 'Merchants Queue', icon: Utensils },
     { path: '/admin/orders', label: 'Global Orders', icon: Receipt },
     { path: '/admin/coupons', label: 'Coupons Manager', icon: Percent },
+    { path: '/admin/categories', label: 'Categories Manager', icon: Folders },
     { path: '/admin/support', label: 'Support Tickets', icon: Ticket },
     { path: '/admin/settings', label: 'Fee Configurations', icon: Settings },
   ];

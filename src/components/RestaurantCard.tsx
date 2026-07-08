@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import type { Restaurant } from '../types';
 import { useFavoritesStore } from '../store/useFavoritesStore';
+import { DEFAULT_RESTAURANT_IMAGE } from '../constants/placeholders';
 
 interface RestaurantCardProps {
   restaurant: Restaurant;
@@ -47,7 +48,7 @@ export const RestaurantCard: React.FC<RestaurantCardProps> = ({ restaurant }) =>
       {/* Image container */}
       <Link to={`/restaurant/${restaurant.id}`} className="block relative aspect-[16/9] w-full overflow-hidden bg-gray-100">
         <img
-          src={restaurant.image}
+          src={restaurant.image || DEFAULT_RESTAURANT_IMAGE}
           alt={restaurant.name}
           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
           loading="lazy"

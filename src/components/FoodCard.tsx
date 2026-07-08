@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import type { MenuItem } from '../types';
 import { useCartStore } from '../store/useCartStore';
 import { useToast } from '../contexts/ToastContext';
+import { DEFAULT_PRODUCT_IMAGE } from '../constants/placeholders';
 
 interface FoodCardProps {
   item: MenuItem;
@@ -83,7 +84,7 @@ export const FoodCard: React.FC<FoodCardProps> = ({ item, restaurantId, restaura
       {/* Image and Add button side */}
       <div className="relative w-28 h-28 shrink-0 bg-gray-50 rounded-xl overflow-hidden self-center border border-gray-100">
         <img
-          src={item.image || 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=400'}
+          src={item.image || DEFAULT_PRODUCT_IMAGE}
           alt={item.name}
           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
           loading="lazy"

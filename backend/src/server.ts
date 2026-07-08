@@ -18,6 +18,7 @@ import customerRoutes from './routes/customerRoutes.js';
 import deliveryRoutes from './routes/deliveryRoutes.js';
 import adminRoutes from './routes/adminRoutes.js';
 import paymentRoutes from './routes/paymentRoutes.js';
+import feedbackRoutes from './routes/feedbackRoutes.js';
 
 // Load Env
 dotenv.config();
@@ -65,6 +66,7 @@ app.use('/api/merchant', merchantRoutes);
 app.use('/api/delivery', deliveryRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/payments', paymentRoutes);
+app.use('/api/feedback', feedbackRoutes);
 app.use('/api', customerRoutes);
 
 // Error Handling

@@ -198,6 +198,16 @@ export const Profile: React.FC = () => {
               </div>
             </div>
 
+            <div className="pt-2 border-t border-gray-100">
+              <Link
+                to="/feedback-help"
+                className="w-full py-2.5 bg-gray-50 hover:bg-gray-100 text-secondary hover:text-on-surface font-bold rounded-xl text-xs transition-colors flex items-center justify-center gap-1.5 border border-outline-variant/30"
+              >
+                <span className="material-symbols-outlined text-[16px]">help_outline</span>
+                Feedback &amp; Help Center
+              </Link>
+            </div>
+
             <button
               onClick={() => {
                 logout();

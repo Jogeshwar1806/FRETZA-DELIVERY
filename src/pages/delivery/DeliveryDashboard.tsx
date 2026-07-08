@@ -8,8 +8,6 @@ import {
   IndianRupee,
   ShoppingBag,
   TrendingUp,
-  MapPin,
-  Clock,
   Compass,
   Search,
   AlertTriangle,
@@ -22,7 +20,6 @@ export const DeliveryDashboard: React.FC = () => {
   const { currentUser } = useAuthStore();
 
   const [searchQuery, setSearchQuery] = useState('');
-  const [filterType, setFilterType] = useState<'All' | 'Biryani' | 'Pizza' | 'Burgers'>('All');
 
   // Fetch Dashboard Stats (Active assignment + completed count + earnings)
   const { data: statsData } = useQuery({
@@ -82,12 +79,12 @@ export const DeliveryDashboard: React.FC = () => {
 
   // Filter & Search orders
   const filteredOrders = (poolResponse.orders || []).filter((ord: any) => {
-    const matchesSearch =
-      ord._id.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      ord.restaurantName.toLowerCase().includes(searchQuery.toLowerCase());
-    
-    if (filterType === 'All') return matchesSearch;
-    return matchesSearch && ord.restaurantName.toLowerCase().includes(filterType.toLowerCase());
+    const restaurantName = ord.restaurantName || '';
+    const orderId = ord._id || '';
+    return (
+      orderId.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      restaurantName.toLowerCase().includes(searchQuery.toLowerCase())
+    );
   });
 
   return (
@@ -161,23 +158,6 @@ export const DeliveryDashboard: React.FC = () => {
               <Compass className="w-4 h-4 text-primary" />
               Available Deliveries ({filteredOrders.length})
             </h3>
-
-            {/* Filter buttons */}
-            <div className="flex gap-1.5 flex-wrap">
-              {(['All', 'Biryani', 'Pizza', 'Burgers'] as const).map((type) => (
-                <button
-                  key={type}
-                  onClick={() => setFilterType(type)}
-                  className={`px-3 py-1.5 rounded-lg text-[9px] font-bold border transition-all ${
-                    filterType === type
-                      ? 'bg-primary text-white border-primary'
-                      : 'bg-white text-secondary border-outline-variant/20 hover:bg-gray-50'
-                  }`}
-                >
-                  {type}
-                </button>
-              ))}
-            </div>
           </div>
 
           {/* Search bar */}
@@ -202,39 +182,60 @@ export const DeliveryDashboard: React.FC = () => {
               {filteredOrders.map((ord: any) => (
                 <div
                   key={ord._id}
-                  className="bg-white p-5 rounded-2xl border border-outline-variant/10 shadow-xs flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 hover:border-primary/20 transition-all"
+                  className="bg-white p-5 rounded-3xl border border-outline-variant/10 shadow-xs flex flex-col md:flex-row justify-between items-stretch md:items-center gap-6 hover:border-primary/20 transition-all text-left"
                 >
-                  <div className="space-y-2">
+                  <div className="space-y-3 flex-1 min-w-0">
+                    {/* Header: Status and ID */}
                     <div className="flex items-center gap-2">
                       <span className="bg-orange-100 text-primary font-bold text-[9px] px-2 py-0.5 rounded-md uppercase">
-                        Ready
+                        {ord.status}
                       </span>
                       <span className="text-[10px] font-bold text-on-surface">
                         Order #{ord._id.substring(ord._id.length - 8).toUpperCase()}
                       </span>
                     </div>
 
-                    <h4 className="text-xs font-bold text-on-surface">{ord.restaurantName}</h4>
-                    
-                    <div className="flex items-center gap-4 text-[10px] text-secondary">
-                      <span className="flex items-center gap-1">
-                        <MapPin className="w-3.5 h-3.5 text-primary" />
-                        {ord.deliveryAddress}
+                    {/* Route Details (Pickup vs Destination) */}
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 bg-gray-50 p-4 rounded-2xl border border-gray-100 text-xs">
+                      <div className="space-y-1 min-w-0">
+                        <span className="block text-[8px] font-bold text-secondary uppercase tracking-wider">Pickup From</span>
+                        <div className="font-bold text-on-surface truncate">{ord.restaurantName || 'Restaurant'}</div>
+                        <div className="text-[10px] text-secondary leading-relaxed truncate">{ord.restaurantAddress || 'Khunta Market'}</div>
+                      </div>
+                      <div className="space-y-1 min-w-0">
+                        <span className="block text-[8px] font-bold text-secondary uppercase tracking-wider">Deliver To</span>
+                        <div className="font-bold text-on-surface truncate">{ord.customerName || 'Customer'}</div>
+                        <div className="text-[10px] text-secondary leading-relaxed truncate">{ord.deliveryAddress}</div>
+                      </div>
+                    </div>
+
+                    {/* Meta info stats */}
+                    <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-[10px] text-secondary pt-1">
+                      <span className="flex items-center gap-1.5 font-bold">
+                        <Compass className="w-3.5 h-3.5 text-primary" />
+                        Distance: <span className="text-on-surface">{ord.distance || '1.5 km'}</span>
                       </span>
-                      <span className="flex items-center gap-1 shrink-0">
-                        <Clock className="w-3.5 h-3.5 text-primary" />
-                        Est: 20-30m
+                      <span className="flex items-center gap-1.5 font-bold">
+                        <IndianRupee className="w-3.5 h-3.5 text-green-600" />
+                        Payout Fee: <span className="text-green-600">₹{ord.deliveryCharge || 45}</span>
+                      </span>
+                      <span className="flex items-center gap-1.5 font-bold">
+                        <ShoppingBag className="w-3.5 h-3.5 text-primary" />
+                        Order Value: <span className="text-on-surface">₹{ord.totalAmount}</span>
                       </span>
                     </div>
                   </div>
 
-                  <button
-                    onClick={() => acceptMutation.mutate(ord._id)}
-                    disabled={acceptMutation.isPending}
-                    className="w-full sm:w-auto px-5 py-2.5 bg-primary text-white font-black text-xs rounded-xl shadow-md hover:bg-orange-600 disabled:bg-orange-300 transition-colors"
-                  >
-                    {acceptMutation.isPending ? 'Accepting...' : 'Accept Job'}
-                  </button>
+                  {/* Accept Action Button */}
+                  <div className="flex items-center shrink-0">
+                    <button
+                      onClick={() => acceptMutation.mutate(ord._id)}
+                      disabled={acceptMutation.isPending}
+                      className="w-full md:w-auto px-6 py-3 bg-primary text-white font-black text-xs rounded-xl shadow-md hover:bg-orange-600 disabled:bg-orange-300 transition-colors"
+                    >
+                      {acceptMutation.isPending ? 'Accepting...' : 'Accept Job'}
+                    </button>
+                  </div>
                 </div>
               ))}
             </div>

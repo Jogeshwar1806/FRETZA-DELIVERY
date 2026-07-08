@@ -151,7 +151,7 @@ export const ActiveDelivery: React.FC = () => {
         <div className="space-y-3">
           <div>
             <h4 className="text-xs font-bold text-on-surface">{order.restaurantName}</h4>
-            <p className="text-[10px] text-secondary mt-1">Khunta Main Market, Odisha</p>
+            <p className="text-[10px] text-secondary mt-1">{order.restaurantAddress || 'Khunta Market, Odisha'}</p>
           </div>
 
           <div className="flex gap-2">
@@ -163,7 +163,7 @@ export const ActiveDelivery: React.FC = () => {
               Navigate to Shop
             </button>
             <a
-              href="tel:9999999999"
+              href={`tel:${order.restaurantPhone || '7978253881'}`}
               className="px-4 py-2.5 border border-outline-variant/20 hover:bg-gray-50 text-secondary rounded-xl flex items-center justify-center"
             >
               <Phone className="w-3.5 h-3.5" />
@@ -200,7 +200,7 @@ export const ActiveDelivery: React.FC = () => {
               Navigate to Customer
             </button>
             <a
-              href="tel:9876543210"
+              href={`tel:${order.customerPhone || '7978253881'}`}
               className="px-4 py-2.5 border border-outline-variant/20 hover:bg-gray-50 text-secondary rounded-xl flex items-center justify-center"
             >
               <Phone className="w-3.5 h-3.5" />
