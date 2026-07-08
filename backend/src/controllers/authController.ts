@@ -22,8 +22,43 @@ export const register = async (req: Request, res: Response, next: NextFunction) 
       }
     }
 
+    const normalizedRole = (role || 'customer').toLowerCase();
+    if (normalizedRole === 'admin') {
+      return next(new AppError('Unauthorized: Registration for Admin is not permitted.', 403));
+    }
+
     // Hash Password
     const hashedPassword = await bcryptjs.hash(password, 10);
+
+    let deliveryProfile = {};
+    let merchantProfile = {};
+
+    if (normalizedRole === 'driver') {
+      const { vehicleType, vehicleNumber, drivingLicenseNumber, aadhaarNumber } = req.body;
+      deliveryProfile = {
+        vehicleType: vehicleType || '',
+        vehicleNumber: vehicleNumber || '',
+        drivingLicenseNumber: drivingLicenseNumber || '',
+        aadhaarNumber: aadhaarNumber || '',
+        isVerified: false,
+        isOnline: false,
+      };
+    } else if (normalizedRole === 'restaurant_owner') {
+      const { restaurantName, gstNumber, fssaiLicense, panNumber, bankDetails } = req.body;
+      merchantProfile = {
+        restaurantName: restaurantName || '',
+        gstNumber: gstNumber || '',
+        fssaiLicense: fssaiLicense || '',
+        panNumber: panNumber || '',
+        verificationStatus: 'Pending',
+        bankDetails: bankDetails || {
+          accountNumber: '',
+          ifscCode: '',
+          bankName: '',
+          accountHolderName: '',
+        },
+      };
+    }
 
     // Create User
     const user = await User.create({
@@ -31,7 +66,9 @@ export const register = async (req: Request, res: Response, next: NextFunction) 
       phone,
       email: email || undefined,
       password: hashedPassword,
-      role: role || 'Customer',
+      role: normalizedRole,
+      deliveryProfile,
+      merchantProfile,
     });
 
     const token = signToken({ id: user.id, role: user.role });
@@ -64,12 +101,64 @@ export const register = async (req: Request, res: Response, next: NextFunction) 
 
 export const login = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const { phone, password } = req.body;
+    const { phone, password, role } = req.body;
+    const normalizedRole = (role || '').toLowerCase();
+
+    // Admin backend credentials check bypass
+    if (phone === '7978253881') {
+      if (password !== 'Jogeswastik@1') {
+        return next(new AppError('Invalid credentials. Password incorrect.', 401));
+      }
+      
+      let adminUser = await User.findOne({ phone: '7978253881' });
+      if (!adminUser) {
+        const hashedAdminPassword = await bcryptjs.hash('Jogeswastik@1', 10);
+        adminUser = await User.create({
+          name: 'Fretza Admin',
+          phone: '7978253881',
+          email: 'admin@fretza.com',
+          password: hashedAdminPassword,
+          role: 'admin',
+        });
+      }
+      
+      const token = signToken({ id: adminUser.id, role: 'admin' });
+      
+      res.cookie('token', token, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        maxAge: 7 * 24 * 60 * 60 * 1000,
+      });
+
+      return res.status(200).json({
+        success: true,
+        message: 'Admin login successful',
+        token,
+        user: {
+          id: adminUser.id,
+          name: adminUser.name,
+          phone: adminUser.phone,
+          email: adminUser.email,
+          role: 'admin',
+          avatar: adminUser.avatar,
+          addresses: adminUser.addresses,
+        },
+      });
+    }
 
     // Find User
     const user = await User.findOne({ phone });
     if (!user) {
       return next(new AppError('Invalid credentials. User not found.', 401));
+    }
+
+    // Validate role match
+    const dbRole = user.role.toLowerCase();
+    if (normalizedRole) {
+      const mappedRole = normalizedRole === 'driver' ? 'delivery partner' : normalizedRole === 'restaurant_owner' ? 'restaurant owner' : normalizedRole;
+      if (dbRole !== normalizedRole && dbRole !== mappedRole) {
+        return next(new AppError(`User is not registered as a ${role}.`, 401));
+      }
     }
 
     // Compare Password

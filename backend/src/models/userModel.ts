@@ -21,6 +21,25 @@ export interface IDeliveryProfile {
   vehicleNumber: string;
   isVerified: boolean;
   isOnline: boolean;
+  aadhaarNumber?: string;
+  aadhaarCard?: string;
+  drivingLicenseNumber?: string;
+  drivingLicense?: string;
+  profilePhoto?: string;
+}
+
+export interface IMerchantProfile {
+  gstNumber?: string;
+  fssaiLicense?: string;
+  panNumber?: string;
+  restaurantName?: string;
+  verificationStatus: 'Pending' | 'Approved' | 'Rejected';
+  bankDetails?: {
+    accountNumber?: string;
+    ifscCode?: string;
+    bankName?: string;
+    accountHolderName?: string;
+  };
 }
 
 export interface IUser extends Document {
@@ -28,10 +47,11 @@ export interface IUser extends Document {
   phone: string;
   email?: string;
   password?: string;
-  role: 'Customer' | 'Restaurant Owner' | 'Delivery Partner' | 'Admin';
+  role: 'customer' | 'driver' | 'restaurant_owner' | 'admin' | string;
   avatar?: string;
   addresses: IAddress[];
   deliveryProfile?: IDeliveryProfile;
+  merchantProfile?: IMerchantProfile;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -66,6 +86,29 @@ const DeliveryProfileSchema = new Schema<IDeliveryProfile>({
   vehicleNumber: { type: String, default: '' },
   isVerified: { type: Boolean, default: false },
   isOnline: { type: Boolean, default: false },
+  aadhaarNumber: { type: String, default: '' },
+  aadhaarCard: { type: String, default: '' },
+  drivingLicenseNumber: { type: String, default: '' },
+  drivingLicense: { type: String, default: '' },
+  profilePhoto: { type: String, default: '' },
+});
+
+const MerchantProfileSchema = new Schema<IMerchantProfile>({
+  gstNumber: { type: String, default: '' },
+  fssaiLicense: { type: String, default: '' },
+  panNumber: { type: String, default: '' },
+  restaurantName: { type: String, default: '' },
+  verificationStatus: {
+    type: String,
+    enum: ['Pending', 'Approved', 'Rejected'],
+    default: 'Pending',
+  },
+  bankDetails: {
+    accountNumber: { type: String, default: '' },
+    ifscCode: { type: String, default: '' },
+    bankName: { type: String, default: '' },
+    accountHolderName: { type: String, default: '' },
+  },
 });
 
 const UserSchema = new Schema<IUser>(
@@ -95,8 +138,8 @@ const UserSchema = new Schema<IUser>(
     },
     role: {
       type: String,
-      enum: ['Customer', 'Restaurant Owner', 'Delivery Partner', 'Admin'],
-      default: 'Customer',
+      enum: ['customer', 'driver', 'restaurant_owner', 'admin', 'Customer', 'Delivery Partner', 'Restaurant Owner', 'Admin'],
+      default: 'customer',
     },
     avatar: {
       type: String,
@@ -107,14 +150,27 @@ const UserSchema = new Schema<IUser>(
       type: DeliveryProfileSchema,
       default: () => ({}),
     },
+    merchantProfile: {
+      type: MerchantProfileSchema,
+      default: () => ({}),
+    },
   },
   {
     timestamps: true,
   }
 );
 
-// Pre-save hook to concatenate details from granular address fields
+// Pre-save hook to concatenate details from granular address fields and normalise roles
 UserSchema.pre('save', function (next) {
+  // Normalise role strings
+  if (this.role) {
+    if (this.role === 'Customer') this.role = 'customer';
+    else if (this.role === 'Delivery Partner' || this.role === 'Driver') this.role = 'driver';
+    else if (this.role === 'Restaurant Owner') this.role = 'restaurant_owner';
+    else if (this.role === 'Admin') this.role = 'admin';
+    else this.role = this.role.toLowerCase();
+  }
+
   if (this.addresses) {
     this.addresses.forEach((addr) => {
       if (addr.houseNumber || addr.street || addr.village || addr.pincode) {

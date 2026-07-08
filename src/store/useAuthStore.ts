@@ -9,8 +9,8 @@ interface AuthState {
   currentUser: UserProfile | null;
   addresses: Address[];
   orders: Order[];
-  login: (phone: string, password: string) => Promise<boolean>;
-  register: (name: string, email: string, phone: string, password: string) => Promise<boolean>;
+  login: (phone: string, password: string, role?: string) => Promise<boolean>;
+  register: (name: string, email: string, phone: string, password: string, role?: string, extraFields?: any) => Promise<boolean>;
   logout: () => Promise<void>;
   getMe: () => Promise<void>;
   addAddress: (address: Omit<Address, 'id'>) => Promise<void>;
@@ -40,10 +40,10 @@ export const useAuthStore = create<AuthState>((set, get) => {
     addresses: [],
     orders: [],
 
-    login: async (phone, password) => {
+    login: async (phone, password, role) => {
       set({ isLoading: true });
       try {
-        const response = await api.post('/auth/login', { phone, password });
+        const response = await api.post('/auth/login', { phone, password, role });
         const { token, user } = response.data;
         
         localStorage.setItem('fretza_token', token);
@@ -61,10 +61,10 @@ export const useAuthStore = create<AuthState>((set, get) => {
       }
     },
 
-    register: async (name, email, phone, password) => {
+    register: async (name, email, phone, password, role, extraFields) => {
       set({ isLoading: true });
       try {
-        const response = await api.post('/auth/register', { name, email, phone, password });
+        const response = await api.post('/auth/register', { name, email, phone, password, role, ...extraFields });
         const { token, user } = response.data;
         
         localStorage.setItem('fretza_token', token);

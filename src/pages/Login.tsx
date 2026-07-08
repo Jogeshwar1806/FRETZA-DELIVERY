@@ -17,10 +17,12 @@ export const Login: React.FC = () => {
   const navigate = useNavigate();
   const { login } = useAuthStore();
   const { showToast } = useToast();
+  const [selectedRole, setSelectedRole] = React.useState<'customer' | 'restaurant_owner' | 'driver'>('customer');
 
   const {
     register,
     handleSubmit,
+    setValue,
     formState: { errors, isSubmitting },
   } = useForm<LoginFields>({
     resolver: zodResolver(loginSchema),
@@ -30,17 +32,32 @@ export const Login: React.FC = () => {
     },
   });
 
+  React.useEffect(() => {
+    if (selectedRole === 'customer') {
+      setValue('phone', '9876543210');
+      setValue('password', 'password123');
+    } else if (selectedRole === 'restaurant_owner') {
+      setValue('phone', '9999999999');
+      setValue('password', 'password123');
+    } else if (selectedRole === 'driver') {
+      setValue('phone', '8888888888');
+      setValue('password', 'password123');
+    }
+  }, [selectedRole, setValue]);
+
   const onSubmit = async (data: LoginFields) => {
     try {
-      const success = await login(data.phone, data.password);
+      const success = await login(data.phone, data.password, selectedRole);
       if (success) {
         showToast('Welcome back to FRETZA!', 'success');
         const user = useAuthStore.getState().currentUser;
-        if (user?.role === 'Restaurant Owner') {
+        const normalizedRole = user?.role?.toLowerCase();
+        
+        if (normalizedRole === 'restaurant_owner' || normalizedRole === 'restaurant owner') {
           navigate('/merchant');
-        } else if (user?.role === 'Delivery Partner') {
+        } else if (normalizedRole === 'driver' || normalizedRole === 'delivery partner') {
           navigate('/delivery');
-        } else if (user?.role === 'Admin') {
+        } else if (normalizedRole === 'admin') {
           navigate('/admin');
         } else {
           navigate('/home');
@@ -60,6 +77,43 @@ export const Login: React.FC = () => {
       </div>
 
       <form onSubmit={handleSubmit(onSubmit)} className="bg-white p-6 rounded-2xl border border-outline-variant/10 shadow-xs space-y-4">
+        {/* Role Switcher */}
+        <div className="flex bg-surface-container-low p-1 rounded-xl border border-outline-variant/10">
+          <button
+            type="button"
+            onClick={() => setSelectedRole('customer')}
+            className={`flex-1 py-1.5 text-[10px] font-bold rounded-lg transition-all ${
+              selectedRole === 'customer'
+                ? 'bg-primary text-white shadow-xs'
+                : 'text-secondary hover:text-on-surface'
+            }`}
+          >
+            Customer
+          </button>
+          <button
+            type="button"
+            onClick={() => setSelectedRole('restaurant_owner')}
+            className={`flex-1 py-1.5 text-[10px] font-bold rounded-lg transition-all ${
+              selectedRole === 'restaurant_owner'
+                ? 'bg-primary text-white shadow-xs'
+                : 'text-secondary hover:text-on-surface'
+            }`}
+          >
+            Merchant
+          </button>
+          <button
+            type="button"
+            onClick={() => setSelectedRole('driver')}
+            className={`flex-1 py-1.5 text-[10px] font-bold rounded-lg transition-all ${
+              selectedRole === 'driver'
+                ? 'bg-primary text-white shadow-xs'
+                : 'text-secondary hover:text-on-surface'
+            }`}
+          >
+            Driver
+          </button>
+        </div>
+
         {/* Phone Field */}
         <div className="space-y-1.5 text-left">
           <label className="block text-xs font-bold text-gray-500 uppercase">Phone Number</label>

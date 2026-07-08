@@ -95,12 +95,21 @@ export interface UserProfile {
   email: string;
   phone: string;
   avatar?: string;
-  role?: 'Customer' | 'Restaurant Owner' | 'Delivery Partner' | 'Admin';
+  role?: 'customer' | 'driver' | 'restaurant_owner' | 'admin' | 'Customer' | 'Restaurant Owner' | 'Delivery Partner' | 'Admin';
   addresses?: Address[];
   deliveryProfile?: {
     vehicleType: string;
     vehicleNumber: string;
     isVerified: boolean;
     isOnline: boolean;
+    aadhaarNumber?: string;
+    drivingLicenseNumber?: string;
+  };
+  merchantProfile?: {
+    restaurantName: string;
+    gstNumber?: string;
+    fssaiLicense?: string;
+    panNumber?: string;
+    verificationStatus?: string;
   };
 }

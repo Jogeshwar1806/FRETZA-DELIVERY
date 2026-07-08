@@ -47,7 +47,23 @@ export const protect = async (
 
 export const restrictTo = (...roles: string[]) => {
   return (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
-    if (!req.user || !roles.includes(req.user.role)) {
+    if (!req.user) {
+      return next(
+        new AppError('Access denied. You do not have permission for this action.', 403)
+      );
+    }
+
+    const userRole = req.user.role.toLowerCase();
+    
+    // Map roles to lowercase equivalent
+    const mappedRoles = roles.map(r => {
+      const lower = r.toLowerCase();
+      if (lower === 'delivery partner') return 'driver';
+      if (lower === 'restaurant owner') return 'restaurant_owner';
+      return lower;
+    });
+
+    if (!mappedRoles.includes(userRole)) {
       return next(
         new AppError('Access denied. You do not have permission for this action.', 403)
       );
@@ -55,3 +71,8 @@ export const restrictTo = (...roles: string[]) => {
     next();
   };
 };
+
+export const requireCustomer = () => restrictTo('customer');
+export const requireDriver = () => restrictTo('driver');
+export const requireRestaurantOwner = () => restrictTo('restaurant_owner');
+export const requireAdmin = () => restrictTo('admin');

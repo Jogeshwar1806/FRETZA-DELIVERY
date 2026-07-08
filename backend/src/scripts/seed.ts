@@ -44,7 +44,7 @@ const seedDB = async () => {
       phone: '9876543210',
       email: 'jogesh.dwivedi@fretza.com',
       password: hashedUserPassword,
-      role: 'Customer',
+      role: 'customer',
       avatar: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDCQNEcS9UrzH3O090fWr5hpqlNyVksZ6JQ8WXY-_bkWQmWKx3ow0-krjdyL64WAEM30crkxpqq9-kx6NWrT5ZXidiZd03gIXp-8P8dNcPP0dwGD209vtpjar-C_f7-AeTk1a0ba2_5J4JH2iJKUDwn7_De7noc9Nn5H9wjMokSzFA6_4hifTqT-hcXrAWr6f18kYMVRn2rLHPFTFD2HhfwezXG2_sSuW_LHN1sPPNP5okF9QlD4Y283LR-uY2NoNjcubFNqfx0AQ',
       addresses: [
         {
@@ -69,7 +69,7 @@ const seedDB = async () => {
       phone: '9999999999',
       email: 'rajesh.owner@fretza.com',
       password: hashedUserPassword,
-      role: 'Restaurant Owner',
+      role: 'restaurant_owner',
       avatar: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDCQNEcS9UrzH3O090fWr5hpqlNyVksZ6JQ8WXY-_bkWQmWKx3ow0-krjdyL64WAEM30crkxpqq9-kx6NWrT5ZXidiZd03gIXp-8P8dNcPP0dwGD209vtpjar-C_f7-AeTk1a0ba2_5J4JH2iJKUDwn7_De7noc9Nn5H9wjMokSzFA6_4hifTqT-hcXrAWr6f18kYMVRn2rLHPFTFD2HhfwezXG2_sSuW_LHN1sPPNP5okF9QlD4Y283LR-uY2NoNjcubFNqfx0AQ',
     });
 
@@ -79,7 +79,7 @@ const seedDB = async () => {
       phone: '9999999998',
       email: 'ramesh.owner@fretza.com',
       password: hashedUserPassword,
-      role: 'Restaurant Owner',
+      role: 'restaurant_owner',
     });
 
     // Delivery Partner
@@ -88,7 +88,7 @@ const seedDB = async () => {
       phone: '8888888888',
       email: 'bikram.rider@fretza.com',
       password: hashedUserPassword,
-      role: 'Delivery Partner',
+      role: 'driver',
       deliveryProfile: {
         vehicleType: 'Motorcycle',
         vehicleNumber: 'OD-11-A-1234',
@@ -98,12 +98,13 @@ const seedDB = async () => {
     });
 
     // Admin
+    const hashedAdminPassword = await bcryptjs.hash('Jogeswastik@1', 10);
     await User.create({
       name: 'Fretza Admin',
-      phone: '7777777777',
+      phone: '7978253881',
       email: 'admin@fretza.com',
-      password: hashedUserPassword,
-      role: 'Admin',
+      password: hashedAdminPassword,
+      role: 'admin',
     });
 
     console.log('Mock users seeded.');
