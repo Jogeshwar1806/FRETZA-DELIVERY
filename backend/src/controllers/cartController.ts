@@ -32,10 +32,12 @@ export const calculateCartPricing = async (cart: any) => {
           menuItem: {
             id: food.id,
             name: food.name,
+            description: food.description,
             price: food.price,
             discountPrice: food.discountPrice,
             image: food.image,
             isVeg: food.isVeg,
+            isNonVeg: food.isNonVeg,
             category: food.category,
             availability: food.availability,
           },

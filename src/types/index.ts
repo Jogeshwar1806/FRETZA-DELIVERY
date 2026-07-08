@@ -7,6 +7,7 @@ export interface MenuItem {
   image: string;
   rating?: number;
   isVeg: boolean;
+  isNonVeg?: boolean;
   category: string;
   popular?: boolean;
 }

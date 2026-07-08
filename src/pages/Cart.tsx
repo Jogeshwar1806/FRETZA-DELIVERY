@@ -109,11 +109,31 @@ export const Cart: React.FC = () => {
                     <img src={item.menuItem.image} alt={item.menuItem.name} className="w-full h-full object-cover" />
                   </div>
                   <div className="flex-1 min-w-0">
-                    <div className="flex justify-between items-start gap-1">
-                      <h4 className="font-bold text-xs text-on-surface truncate">{item.menuItem.name}</h4>
+                    <div className="flex justify-between items-start gap-2">
+                      <div className="space-y-1 text-left">
+                        <div className="flex items-center gap-1.5 flex-wrap">
+                          {/* Veg / Non-Veg Indicator */}
+                          <span 
+                            className={`w-3 h-3 border flex items-center justify-center p-[1px] shrink-0 ${
+                              item.menuItem.isVeg ? 'border-green-600' : 'border-red-600'
+                            }`}
+                          >
+                            <span className={`w-full h-full rounded-full ${item.menuItem.isVeg ? 'bg-green-600' : 'bg-red-600'}`}></span>
+                          </span>
+                          <h4 className="font-bold text-xs text-on-surface truncate">{item.menuItem.name}</h4>
+                          <span className="bg-gray-100 text-gray-600 text-[8px] font-extrabold uppercase px-1.5 py-0.5 rounded tracking-wider shrink-0">
+                            {item.menuItem.category}
+                          </span>
+                        </div>
+                        {item.menuItem.description && (
+                          <p className="text-[10px] text-gray-400 font-body-sm line-clamp-1 leading-normal">
+                            {item.menuItem.description}
+                          </p>
+                        )}
+                      </div>
                       <span className="font-bold text-xs text-on-surface shrink-0">₹{item.menuItem.price * item.quantity}</span>
                     </div>
-                    <p className="text-[10px] text-secondary mt-0.5">₹{item.menuItem.price} each</p>
+                    <p className="text-[10px] text-secondary mt-0.5 text-left">₹{item.menuItem.price} each</p>
                     
                     <div className="mt-3 flex items-center gap-4">
                       {/* Quantity Selector */}

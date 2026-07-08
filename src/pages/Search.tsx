@@ -40,6 +40,28 @@ export const Search: React.FC = () => {
     }
   };
 
+  // Aggregate all available food items across all restaurants
+  const allFoods = useMemo(() => {
+    const foods: { item: MenuItem; restId: string; restName: string }[] = [];
+    restaurants.forEach((r) => {
+      if (r.menu) {
+        const allMenu = [
+          ...(r.menu.bestsellers || []),
+          ...(r.menu.mains || []),
+          ...(r.menu.desserts || []),
+          ...(r.menu.beverages || []),
+        ];
+        allMenu.forEach((item) => {
+          // Avoid duplicate items if they exist
+          if (!foods.some((f) => f.item.id === item.id)) {
+            foods.push({ item, restId: r.id, restName: r.name });
+          }
+        });
+      }
+    });
+    return foods;
+  }, [restaurants]);
+
   // Perform search matching
   const searchResults = useMemo(() => {
     if (!query.trim()) return { restaurants: [], foods: [] };
@@ -147,6 +169,32 @@ export const Search: React.FC = () => {
               ))}
             </div>
           </div>
+
+          {/* All Available Dishes Section */}
+          {allFoods.length > 0 && (
+            <div className="space-y-3 pt-4 border-t border-outline-variant/10">
+              <h3 className="font-headline-md text-xs font-bold text-gray-400 uppercase tracking-wider text-left">All Available Dishes</h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {allFoods.map(({ item, restId, restName }) => (
+                  <div key={item.id} className="relative">
+                    <div className="absolute top-2 right-4 z-10">
+                      <Link
+                        to={`/restaurant/${restId}`}
+                        className="bg-gray-100 hover:bg-orange-50 hover:text-primary transition-colors text-[9px] font-extrabold uppercase px-2 py-0.5 rounded text-secondary"
+                      >
+                        from {restName}
+                      </Link>
+                    </div>
+                    <FoodCard
+                      item={item}
+                      restaurantId={restId}
+                      restaurantName={restName}
+                    />
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
       ) : (
         <div className="space-y-6 pt-2">
