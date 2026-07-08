@@ -92,6 +92,8 @@ export const register = async (req: Request, res: Response, next: NextFunction) 
         role: user.role,
         avatar: user.avatar,
         addresses: user.addresses,
+        deliveryProfile: user.deliveryProfile,
+        merchantProfile: user.merchantProfile,
       },
     });
   } catch (error) {
@@ -188,6 +190,8 @@ export const login = async (req: Request, res: Response, next: NextFunction) => 
         role: user.role,
         avatar: user.avatar,
         addresses: user.addresses,
+        deliveryProfile: user.deliveryProfile,
+        merchantProfile: user.merchantProfile,
       },
     });
   } catch (error) {
@@ -219,6 +223,8 @@ export const getMe = async (req: AuthenticatedRequest, res: Response, next: Next
         role: req.user.role,
         avatar: req.user.avatar,
         addresses: req.user.addresses,
+        deliveryProfile: req.user.deliveryProfile,
+        merchantProfile: req.user.merchantProfile,
       },
     });
   } catch (error) {
