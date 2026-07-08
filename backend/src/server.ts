@@ -5,6 +5,7 @@ import morgan from 'morgan';
 import cookieParser from 'cookie-parser';
 import dotenv from 'dotenv';
 import path from 'path';
+import os from 'os';
 import { fileURLToPath } from 'url';
 import { connectDB } from './config/db.js';
 import { errorHandler, notFoundHandler } from './middleware/errorMiddleware.js';
